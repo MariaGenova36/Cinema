@@ -1,5 +1,4 @@
 ﻿@model Cinema.Models.Movie
-
 @{
     ViewData["Title"] = "Create";
 }
@@ -8,9 +7,12 @@
 
 <h4>Movie</h4>
 <hr />
+<div class="text-danger">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+</div>
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Title" class="control-label"></label>
@@ -28,18 +30,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="Duration" class="control-label"></label>
-                <input asp-for="Duration" class="form-control" />
+                <input asp-for="Duration" class="form-control" type="time" step="60"  />
                 <span asp-validation-for="Duration" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ReleaseDate" class="control-label"></label>
-                <input asp-for="ReleaseDate" class="form-control" />
+                <input asp-for="ReleaseDate" type="date" class="form-control" />
                 <span asp-validation-for="ReleaseDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PosterUrl" class="control-label"></label>
-                <input asp-for="PosterUrl" class="form-control" />
-                <span asp-validation-for="PosterUrl" class="text-danger"></span>
+                <label asp-for="PosterFile" class="control-label"></label>
+                <input asp-for="PosterFile" type="file" class="form-control" />
+                <span asp-validation-for="PosterFile" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

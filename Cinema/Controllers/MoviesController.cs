@@ -46,9 +46,10 @@ namespace Cinema.Controllers
         }
 
         // GET: Movies/Create
+        [HttpGet]
         public IActionResult Create()
         {
-            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Id");
+            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Name");
             return View();
         }
 
@@ -57,16 +58,38 @@ namespace Cinema.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,GenreId,Duration,ReleaseDate,PosterUrl")] Movie movie)
+        public async Task<IActionResult> Create(Movie movie)
         {
-            if (ModelState.IsValid)
+            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Name", movie.GenreId);
+
+            if (!ModelState.IsValid)
             {
-                _context.Add(movie);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Debug output to console or log file
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+
+                return View(movie);
             }
-            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Id", movie.GenreId);
-            return View(movie);
+
+            // Save image
+            if (movie.PosterFile != null && movie.PosterFile.Length > 0)
+            {
+                var fileName = Path.GetFileName(movie.PosterFile.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await movie.PosterFile.CopyToAsync(stream);
+                }
+
+                movie.PosterUrl = "/images/" + fileName;
+            }
+
+            _context.Add(movie);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Movies/Edit/5
@@ -149,6 +172,14 @@ namespace Cinema.Controllers
             var movie = await _context.Movies.FindAsync(id);
             if (movie != null)
             {
+                if (!string.IsNullOrEmpty(movie.PosterUrl))
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", movie.PosterUrl.TrimStart('/'));
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                }
                 _context.Movies.Remove(movie);
             }
 
