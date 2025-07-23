@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Cinema.Models.Hall>
+
+@{
+    ViewData["Title"] = "Halls";
+}
+
+<h1>Halls</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Hall</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.First().Name)</th>
+            <th>@Html.DisplayNameFor(model => model.First().SeatCount)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var hall in Model)
+        {
+            <tr>
+                <td>@hall.Name</td>
+                <td>@hall.SeatCount</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@hall.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@hall.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

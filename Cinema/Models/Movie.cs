@@ -14,7 +14,7 @@ namespace Cinema.Models
         public TimeSpan Duration { get; set; }
         public DateTime ReleaseDate { get; set; }
         [NotMapped]
-        public IFormFile PosterFile { get; set; }
+        public IFormFile? PosterFile { get; set; }
         public string? PosterUrl { get; set; }
     }
 }

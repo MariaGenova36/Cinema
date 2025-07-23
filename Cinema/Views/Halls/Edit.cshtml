@@ -1,0 +1,44 @@
+﻿@model Cinema.Models.Hall
+
+@{
+    ViewData["Title"] = "Edit Hall";
+}
+
+<h1>Edit Hall</h1>
+
+<h4>Hall</h4>
+<hr />
+
+<div class="text-danger">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+</div>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SeatCount" class="control-label"></label>
+        <input asp-for="SeatCount" class="form-control" />
+        <span asp-validation-for="SeatCount" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

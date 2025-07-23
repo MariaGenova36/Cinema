@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Cinema.Models.Projection>
+
+@{
+    ViewData["Title"] = "Projections";
+}
+
+<h1>Projections</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Projection</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Movie</th>
+            <th>Hall</th>
+            <th>Projection Time</th>
+            <th>Ticket Price</th>
+            <th>Available Seats</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Movie?.Title</td>
+                <td>@item.Hall?.Name</td>
+                <td>@item.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>@item.TicketPrice.ToString("C")</td>
+                <td>@item.AvailableSeats</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -105,7 +105,7 @@ namespace Cinema.Controllers
             {
                 return NotFound();
             }
-            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Id", movie.GenreId);
+         ViewBag.Genres = new SelectList(_context.Genres, "Id", "Name", movie.GenreId);
             return View(movie);
         }
 
@@ -114,7 +114,7 @@ namespace Cinema.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,GenreId,Duration,ReleaseDate,PosterUrl")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,GenreId,Duration,ReleaseDate,PosterFile")] Movie movie)
         {
             if (id != movie.Id)
             {
@@ -125,8 +125,35 @@ namespace Cinema.Controllers
             {
                 try
                 {
-                    _context.Update(movie);
+                    var movieFromDb = await _context.Movies.FindAsync(id);
+                    if (movieFromDb == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Обнови основните свойства
+                    movieFromDb.Title = movie.Title;
+                    movieFromDb.Description = movie.Description;
+                    movieFromDb.GenreId = movie.GenreId;
+                    movieFromDb.Duration = movie.Duration;
+                    movieFromDb.ReleaseDate = movie.ReleaseDate;
+
+                    // Ако е качен нов файл, запази новата снимка
+                    if (movie.PosterFile != null)
+                    {
+                        var fileName = Path.GetFileName(movie.PosterFile.FileName);
+                        var filePath = Path.Combine("wwwroot/images", fileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await movie.PosterFile.CopyToAsync(stream);
+                        }
+
+                        movieFromDb.PosterUrl = "/images/" + fileName;
+                    }
+
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -139,11 +166,12 @@ namespace Cinema.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["GenreId"] = new SelectList(_context.Genres, "Id", "Id", movie.GenreId);
+
+            ViewBag.Genres = new SelectList(_context.Genres, "Id", "Name", movie.GenreId);
             return View(movie);
         }
+
 
         // GET: Movies/Delete/5
         public async Task<IActionResult> Delete(int? id)

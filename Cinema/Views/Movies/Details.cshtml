@@ -1,54 +1,55 @@
 ﻿@model Cinema.Models.Movie
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Movie Details";
 }
 
-<h1>Details</h1>
+<h1 class="mb-4">Movie Details</h1>
 
-<div>
-    <h4>Movie</h4>
-    <hr />
+<div class="card shadow rounded-3 p-4">
+    <h4 class="mb-3">@Model.Title</h4>
+    <hr class="bg-secondary" />
+
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Genre)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Genre.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Duration)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Duration)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ReleaseDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ReleaseDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PosterUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PosterUrl)
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+
+        <hr class="bg-secondary" />
+
+        <dt class="col-sm-3">Genre</dt>
+        <dd class="col-sm-9">@Model.Genre?.Name</dd>
+
+        <hr class="bg-secondary" />
+
+        <dt class="col-sm-3">Duration</dt>
+        <dd class="col-sm-9">@Model.Duration.ToString(@"h\:mm") ч.</dd>
+
+        <hr class="bg-secondary" />
+
+        <dt class="col-sm-3">Release Date</dt>
+        <dd class="col-sm-9">@Model.ReleaseDate.ToString("dd.MM.yyyy")</dd>
+
+        <hr class="bg-secondary" />
+
+        <dt class="col-sm-3">Poster</dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrEmpty(Model.PosterUrl))
+            {
+                <img src="@Model.PosterUrl" alt="Poster" class="img-fluid rounded shadow" style="max-height: 200px;" />
+            }
+            else
+            {
+                <span>No poster available.</span>
+            }
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+
+<div class="mt-4">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+        <i class="bi bi-pencil-square"></i> Edit
+    </a>
+    <a asp-action="Index" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back to List
+    </a>
 </div>

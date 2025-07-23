@@ -1,0 +1,56 @@
+﻿@model Cinema.Models.Projection
+
+@{
+    ViewData["Title"] = "Edit Projection";
+}
+
+<h1>Edit Projection</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for="MovieId"></label>
+        <select asp-for="MovieId" class="form-control" asp-items="@(ViewData["MovieId"] as SelectList)"></select>
+        <span asp-validation-for="MovieId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="HallId"></label>
+        <select asp-for="HallId" class="form-control" asp-items="@(ViewData["HallId"] as SelectList)"></select>
+        <span asp-validation-for="HallId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProjectionTime"></label>
+        <input asp-for="ProjectionTime" class="form-control" type="datetime-local"
+               value="@Model.ProjectionTime.ToString("yyyy-MM-ddTHH:mm")" />
+        <span asp-validation-for="ProjectionTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TicketPrice"></label>
+        <input asp-for="TicketPrice" class="form-control" type="number" step="0.01" />
+        <span asp-validation-for="TicketPrice" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="AvailableSeats"></label>
+        <input asp-for="AvailableSeats" class="form-control" />
+        <span asp-validation-for="AvailableSeats" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

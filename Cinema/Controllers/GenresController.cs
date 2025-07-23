@@ -25,24 +25,6 @@ namespace Cinema.Controllers
             return View(await _context.Genres.ToListAsync());
         }
 
-        // GET: Genres/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var genre = await _context.Genres
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (genre == null)
-            {
-                return NotFound();
-            }
-
-            return View(genre);
-        }
-
         // GET: Genres/Create
         public IActionResult Create()
         {

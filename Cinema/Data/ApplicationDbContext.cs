@@ -9,7 +9,9 @@ namespace CinemaProjections.Data
 
         public DbSet<Movie> Movies { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<Projection> Projections { get; set; }
+        public DbSet<Hall> Halls { get; set; }
 
-       
+        }
     }
-}
+

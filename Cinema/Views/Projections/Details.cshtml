@@ -1,0 +1,39 @@
+﻿@model Cinema.Models.Projection
+
+@{
+    ViewData["Title"] = "Projection Details";
+}
+
+<h1>Projection Details</h1>
+
+<div class="card p-4 shadow rounded">
+    <dl class="row">
+        <dt class="col-sm-3">Movie</dt>
+        <dd class="col-sm-9">@Model.Movie?.Title</dd>
+
+        <hr class="bg-secondary" />
+
+        <dt class="col-sm-3">Hall</dt>
+        <dd class="col-sm-9">@Model.Hall?.Name</dd>
+
+        <hr class="bg-secondary" />
+
+        <dt class="col-sm-3">Projection Time</dt>
+        <dd class="col-sm-9">@Model.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</dd>
+
+        <hr class="bg-secondary" />
+
+        <dt class="col-sm-3">Ticket Price</dt>
+        <dd class="col-sm-9">@Model.TicketPrice.ToString("F2") лв.</dd>
+
+        <hr class="bg-secondary" />
+
+        <dt class="col-sm-3">Available Seats</dt>
+        <dd class="col-sm-9">@Model.AvailableSeats</dd>
+    </dl>
+
+    <div class="mt-4">
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
