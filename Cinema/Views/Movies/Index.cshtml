@@ -7,31 +7,66 @@
 <h1>Movies</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-success">
-        <i class="bi bi-plus-lg"></i> Create New Movie
+    <a asp-action="Create" class="btn btn-success">Create New Movie
     </a>
 </p>
-<table class="table">
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <input type="text" name="search" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search..." />
+    </div>
+    <div class="col-md-3">
+        <select name="genreId" class="form-control" asp-items="(SelectList)ViewBag.Genres">
+            <option value="">-- All genres --</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Filter</button>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="Index" class="btn btn-secondary w-100">Clear</a>
+    </div>
+</form>
+
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["TitleSort"]"
+                   asp-route-search="@ViewData["CurrentFilter"]"
+                   asp-route-genreId="@ViewData["CurrentGenre"]">
+                    Title @if (ViewData["CurrentSort"]?.ToString().StartsWith("title") == true)
+                    {
+                        <span class="@(ViewData["CurrentSort"].ToString().EndsWith("asc") ? "bi bi-caret-up-fill" : "bi bi-caret-down-fill")"></span>
+                    }
+                </a>
+            </th>
+            <th>Description</th>
+            <th>Genre</th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["DurationSort"]"
+                   asp-route-search="@ViewData["CurrentFilter"]"
+                   asp-route-genreId="@ViewData["CurrentGenre"]">
+                    Duration @if (ViewData["CurrentSort"]?.ToString().StartsWith("duration") == true)
+                    {
+                        <span class="@(ViewData["CurrentSort"].ToString().EndsWith("asc") ? "bi bi-caret-up-fill" : "bi bi-caret-down-fill")"></span>
+                    }
+                </a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                <a asp-action="Index"
+                   asp-route-sortOrder="@ViewData["ReleaseSort"]"
+                   asp-route-search="@ViewData["CurrentFilter"]"
+                   asp-route-genreId="@ViewData["CurrentGenre"]">
+                    Release Date @if (ViewData["CurrentSort"]?.ToString().StartsWith("release") == true)
+                    {
+                        <span class="@(ViewData["CurrentSort"].ToString().EndsWith("asc") ? "bi bi-caret-up-fill" : "bi bi-caret-down-fill")"></span>
+                    }
+                </a>
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Genre)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Duration)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReleaseDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PosterFile)
-            </th>
+            <th>Poster</th>
             <th></th>
         </tr>
     </thead>
