@@ -31,6 +31,9 @@
                 <td>@item.TicketPrice.ToString("C")</td>
                 <td>@item.AvailableSeats</td>
                 <td>
+                    <a asp-controller="Tickets" asp-action="Create" asp-route-projectionId="@item.Id" class="btn btn-success btn-sm">
+                        Buy Ticket
+                    </a>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>

@@ -47,8 +47,32 @@
                             <a class="nav-link" asp-controller="Halls" asp-action="Index">Halls</a>
                         </li>
                     </ul>
-
                     <!-- Дясна навигация -->
+                    <ul class="navbar-nav ms-auto">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-danger rounded-pill shadow-sm">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-dark me-2">
+                                    <i class="bi bi-box-arrow-in-right"></i> Login
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-controller="Account" asp-action="Register" class="btn btn-success">
+                                    <i class="bi bi-person-plus"></i> Register
+                                </a>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>

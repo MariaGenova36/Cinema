@@ -1,4 +1,5 @@
 using CinemaProjections.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Cinema
@@ -12,6 +13,17 @@ namespace Cinema
             // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Добави Identity
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";  // Ако не си логнат, пренасочва към Login
+                options.LogoutPath = "/Account/Logout";
+            });
 
             builder.Services.AddControllersWithViews();
 
@@ -28,6 +40,7 @@ namespace Cinema
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();

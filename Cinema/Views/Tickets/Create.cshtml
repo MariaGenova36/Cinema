@@ -1,0 +1,36 @@
+﻿@model Cinema.Models.Ticket
+@{
+    ViewData["Title"] = "Buy Ticket";
+    var projection = ViewBag.Projection as Cinema.Models.Projection;
+}
+
+<h1>Buy Ticket</h1>
+
+<div class="card p-3 mb-3">
+    <p><strong>Movie:</strong> @projection.Movie.Title</p>
+    <p><strong>Hall:</strong> @projection.Hall.Name</p>
+    <p><strong>Date/Time:</strong> @projection.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</p>
+    <p><strong>Price:</strong> @projection.TicketPrice.ToString("F2") лв.</p>
+    <p><strong>Available seats:</strong> @projection.AvailableSeats</p>
+</div>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="ProjectionId" />
+
+    <div class="form-group mb-3">
+        <label asp-for="CustomerName"></label>
+        <input asp-for="CustomerName" class="form-control" />
+        <span asp-validation-for="CustomerName" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Buy</button>
+    <a asp-action="Details" asp-controller="Projections" asp-route-id="@projection.Id" class="btn btn-secondary">
+        Back
+    </a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
