@@ -1,0 +1,64 @@
+﻿@model ProfileViewModel
+
+<h2>Your Profile</h2>
+
+<form method="post" asp-action="Index">
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label"></label>
+        <input asp-for="Email" class="form-control" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FullName" class="form-label"></label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+
+    @if (ViewData["Message"] != null)
+    {
+        <div class="alert alert-success mt-3">
+            @ViewData["Message"]
+        </div>
+    }
+</form>
+
+<hr />
+
+<h3>Your Tickets</h3>
+
+@if (ViewBag.Tickets != null && ((List<Cinema.Models.Ticket>)ViewBag.Tickets).Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Movie</th>
+                <th>Projection Date</th>
+                <th>Seat Number</th>
+                <th>Purchase Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in (List<Cinema.Models.Ticket>)ViewBag.Tickets)
+            {
+                <tr>
+                    <td>@ticket.Projection.Movie.Title</td>
+                    <td>@ticket.Projection.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@ticket.SeatNumber</td>
+                    <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>You have no tickets.</p>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

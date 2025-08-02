@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cinema.Models
 {
@@ -15,5 +16,14 @@ namespace Cinema.Models
         public string? CustomerName { get; set; }
 
         public DateTime PurchaseTime { get; set; } = DateTime.UtcNow;
+
+        //Свързване с потребителя
+        public string? UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public ApplicationUser? User { get; set; }
+
+        [Required]
+        public int SeatNumber { get; set; }
     }
 }
