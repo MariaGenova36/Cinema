@@ -24,6 +24,11 @@ namespace Cinema.Models
         public ApplicationUser? User { get; set; }
 
         [Required]
-        public int SeatNumber { get; set; }
+        [Range(1, 50)]
+        public int SeatRow { get; set; }
+
+        [Required]
+        [Range(1, 50)]
+        public int SeatColumn { get; set; }
     }
 }

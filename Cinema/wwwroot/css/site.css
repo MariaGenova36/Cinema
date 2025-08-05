@@ -29,3 +29,34 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.screen-indicator {
+    width: 600px;
+    margin: 0 auto;
+    font-weight: bold;
+    font-size: 18px;
+    letter-spacing: 2px;
+    background-color: #6c757d;
+    color: white;
+    padding: 8px;
+    border-radius: 8px;
+    user-select: none;
+    text-align: center;
+}
+
+.seat-row {
+    width: 100%;
+}
+
+.seat-btn {
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    padding: 0;
+    font-size: 12px;
+}
+
+.seat-grid-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+}

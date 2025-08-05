@@ -20,11 +20,20 @@ namespace Cinema.Controllers
         // GET: Projections
         public async Task<IActionResult> Index()
         {
-            var projections = _context.Projections
+            var projections = await _context.Projections
+                .Include(p => p.Hall)
                 .Include(p => p.Movie)
-                .Include(p => p.Hall);
+                .ToListAsync();
 
-            return View(await projections.ToListAsync());
+            // Създаваме речник за броя заети билети на всяка прожекция
+            var ticketsCount = await _context.Tickets
+                .GroupBy(t => t.ProjectionId)
+                .Select(g => new { ProjectionId = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.ProjectionId, x => x.Count);
+
+            ViewData["TicketsCount"] = ticketsCount;
+
+            return View(projections);
         }
 
         // GET: Projections/Details/5
@@ -35,9 +44,10 @@ namespace Cinema.Controllers
             var projection = await _context.Projections
                 .Include(p => p.Movie)
                 .Include(p => p.Hall)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
 
-            if (projection == null) return NotFound();
+            if (projection == null)
+                return NotFound();
 
             return View(projection);
         }
@@ -65,26 +75,17 @@ namespace Cinema.Controllers
                 }
                 else
                 {
-                    projection.AvailableSeats = hall.SeatCount;
+                    // Премахваме AvailableSeats, няма нужда да го пълним
                     _context.Add(projection);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
             }
 
-           
             ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title", projection.MovieId);
             ViewData["HallId"] = new SelectList(_context.Halls, "Id", "Name", projection.HallId);
 
-            return View(new Projection());
-        }
-
-        [HttpGet]
-        public JsonResult GetSeatCount(int hallId)
-        {
-            var hall = _context.Halls.FirstOrDefault(h => h.Id == hallId);
-            int seatCount = hall?.SeatCount ?? 0;
-            return Json(new { seatCount });
+            return View(projection);
         }
 
         // GET: Projections/Edit/5
@@ -92,18 +93,22 @@ namespace Cinema.Controllers
         {
             if (id == null) return NotFound();
 
-            var projection = await _context.Projections.FindAsync(id);
+            var projection = await _context.Projections
+                .Include(p => p.Hall)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (projection == null) return NotFound();
 
             ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title", projection.MovieId);
             ViewData["HallId"] = new SelectList(_context.Halls, "Id", "Name", projection.HallId);
+
             return View(projection);
         }
 
         // POST: Projections/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,MovieId,HallId,ProjectionTime,TicketPrice,AvailableSeats")] Projection projection)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,MovieId,HallId,ProjectionTime,TicketPrice")] Projection projection)
         {
             if (id != projection.Id) return NotFound();
 
@@ -138,6 +143,8 @@ namespace Cinema.Controllers
 
             if (projection == null) return NotFound();
 
+            int takenSeatsCount = await _context.Tickets.CountAsync(t => t.ProjectionId == id);
+
             return View(projection);
         }
 
@@ -155,6 +162,17 @@ namespace Cinema.Controllers
         private bool ProjectionExists(int id)
         {
             return _context.Projections.Any(e => e.Id == id);
+        }
+
+        //връща редове и колони на залата
+        [HttpGet]
+        public async Task<JsonResult> GetHallSeats(int hallId)
+        {
+            var hall = await _context.Halls.FindAsync(hallId);
+            if (hall == null)
+                return Json(new { rows = 0, columns = 0 });
+
+            return Json(new { rows = hall.Rows, columns = hall.Columns });
         }
     }
 }

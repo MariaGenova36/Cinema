@@ -4,93 +4,102 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+using System;
 
-public class TicketsController : Controller
+namespace Cinema.Controllers
 {
-    private readonly ApplicationDbContext _context;
-    private readonly UserManager<ApplicationUser> _userManager;
-
-    public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+    public class TicketsController : Controller
     {
-        _context = context;
-        _userManager = userManager;
-    }
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-    // GET: /Tickets/Create?projectionId=5
-    public async Task<IActionResult> Create(int projectionId)
-    {
-        var projection = await _context.Projections
-            .Include(p => p.Movie)
-            .Include(p => p.Hall)
-            .FirstOrDefaultAsync(p => p.Id == projectionId);
-
-        if (projection == null) return NotFound();
-        if (projection.AvailableSeats <= 0) return BadRequest("No seats available.");
-
-        ViewBag.Projection = projection;
-        return View(new Ticket { ProjectionId = projectionId });
-    }
-
-    // POST: /Tickets/Create (from form)
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Ticket ticket)
-    {
-        var user = User.Identity?.IsAuthenticated == true
-            ? await _userManager.GetUserAsync(User)
-            : null;
-
-        var result = await TryCreateTicket(ticket.ProjectionId, ticket.SeatNumber, user?.Id, ticket.CustomerName);
-        if (result.success)
+        public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
-            return RedirectToAction("Details", "Projections", new { id = ticket.ProjectionId });
+            _context = context;
+            _userManager = userManager;
         }
 
-        ModelState.AddModelError("", result.errorMessage ?? "Error booking ticket");
-        ViewBag.Projection = await _context.Projections
-            .Include(p => p.Movie)
-            .Include(p => p.Hall)
-            .FirstOrDefaultAsync(p => p.Id == ticket.ProjectionId);
-        return View(ticket);
-    }
-
-    // POST: /Tickets/BookTicket (auto-book for logged-in users)
-    [Authorize]
-    [HttpPost]
-    public async Task<IActionResult> BookTicket(int projectionId, int seatNumber)
-    {
-        var user = await _userManager.GetUserAsync(User);
-        var result = await TryCreateTicket(projectionId, seatNumber, user.Id, null);
-
-        if (result.success)
-            return RedirectToAction("Index", "Profile");
-
-        return BadRequest(result.errorMessage);
-    }
-
-    // Централизиран метод за създаване на билет
-    private async Task<(bool success, string? errorMessage)> TryCreateTicket(int projectionId, int seatNumber, string? userId, string? customerName)
-    {
-        var projection = await _context.Projections.FirstOrDefaultAsync(p => p.Id == projectionId);
-        if (projection == null) return (false, "Projection not found");
-
-        if (projection.AvailableSeats <= 0)
-            return (false, "No seats available.");
-
-        var ticket = new Ticket
+        // GET: Tickets/Create?projectionId=5
+        [Authorize]
+        public async Task<IActionResult> Create(int projectionId)
         {
-            ProjectionId = projectionId,
-            SeatNumber = seatNumber,
-            UserId = userId,
-            CustomerName = customerName,
-            PurchaseTime = DateTime.UtcNow
-        };
+            var projection = await _context.Projections
+                .Include(p => p.Hall)
+                .Include(p => p.Movie)
+                .FirstOrDefaultAsync(p => p.Id == projectionId);
 
-        projection.AvailableSeats -= 1;
-        _context.Tickets.Add(ticket);
-        _context.Projections.Update(projection);
-        await _context.SaveChangesAsync();
+            if (projection == null)
+                return NotFound();
 
-        return (true, null);
+            ViewBag.Projection = projection;
+
+            var takenSeats = await _context.Tickets
+                .Where(t => t.ProjectionId == projectionId)
+                .Select(t => new { t.SeatRow, t.SeatColumn })
+                .ToListAsync();
+
+            ViewBag.TakenSeats = takenSeats;
+
+            return View(new Ticket { ProjectionId = projectionId });
+        }
+
+        // POST: Tickets/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Create(Ticket ticket)
+        {
+            var projection = await _context.Projections
+                .Include(p => p.Hall)
+                .FirstOrDefaultAsync(p => p.Id == ticket.ProjectionId);
+
+            if (projection == null)
+                return NotFound();
+
+            bool isTaken = await _context.Tickets.AnyAsync(t =>
+                t.ProjectionId == ticket.ProjectionId &&
+                t.SeatRow == ticket.SeatRow &&
+                t.SeatColumn == ticket.SeatColumn);
+
+            if (isTaken)
+            {
+                ModelState.AddModelError("", "This seat is already taken.");
+                ViewBag.Projection = projection;
+                ViewBag.TakenSeats = await _context.Tickets
+                    .Where(t => t.ProjectionId == ticket.ProjectionId)
+                    .Select(t => new { t.SeatRow, t.SeatColumn })
+                    .ToListAsync();
+
+                return View(ticket);
+            }
+
+            if (ticket.SeatRow < 1 || ticket.SeatRow > projection.Hall.Rows || ticket.SeatColumn < 1 || ticket.SeatColumn > projection.Hall.Columns)
+            {
+                ModelState.AddModelError("", "This seat does not exist.");
+                ViewBag.Projection = projection;
+                ViewBag.TakenSeats = await _context.Tickets
+                    .Where(t => t.ProjectionId == ticket.ProjectionId)
+                    .Select(t => new { t.SeatRow, t.SeatColumn })
+                    .ToListAsync();
+                return View(ticket);
+            }
+
+            // Взимаме текущия логнат потребител и добавяме името му
+            var user = await _userManager.GetUserAsync(User);
+            ticket.CustomerName = user.FullName;
+            ticket.UserId = user.Id;
+            ticket.PurchaseTime = DateTime.UtcNow;
+
+            _context.Tickets.Add(ticket);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Success");
+        }
+        public IActionResult Success()
+        {
+            return View();
+        }
     }
 }

@@ -45,7 +45,7 @@
                 <tr>
                     <td>@ticket.Projection.Movie.Title</td>
                     <td>@ticket.Projection.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@ticket.SeatNumber</td>
+                    <td>Row: @ticket.SeatRow, Seat: @ticket.SeatColumn</td>
                     <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
                 </tr>
             }

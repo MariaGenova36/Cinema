@@ -74,7 +74,7 @@ namespace Cinema.Controllers
         // POST: Halls/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,SeatCount")] Hall hall)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Rows,Columns")] Hall hall)
         {
             if (id != hall.Id)
                 return NotFound();

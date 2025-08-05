@@ -2,6 +2,10 @@
 
 @{
     ViewData["Title"] = "Projection Details";
+
+    int takenSeats = ViewBag.TakenSeatsCount ?? 0;
+    int totalSeats = ViewBag.TotalSeats ?? 0;
+    int availableSeats = totalSeats - takenSeats;
 }
 
 <h1>Projection Details</h1>
@@ -26,10 +30,6 @@
         <dt class="col-sm-3">Ticket Price</dt>
         <dd class="col-sm-9">@Model.TicketPrice.ToString("F2") лв.</dd>
 
-        <hr class="bg-secondary" />
-
-        <dt class="col-sm-3">Available Seats</dt>
-        <dd class="col-sm-9">@Model.AvailableSeats</dd>
     </dl>
 
     <div class="mt-4">

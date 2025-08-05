@@ -21,8 +21,5 @@ namespace Cinema.Models
         [Required]
         [Range(0, 1000)]
         public decimal TicketPrice { get; set; }
-
-        [ScaffoldColumn(false)]
-        public int AvailableSeats { get; set; }
     }
 }

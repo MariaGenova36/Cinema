@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Projections";
+    var ticketsCount = ViewData["TicketsCount"] as Dictionary<int, int>;
 }
 
 <h1>Projections</h1>
@@ -18,18 +19,24 @@
             <th>Projection Time</th>
             <th>Ticket Price</th>
             <th>Available Seats</th>
+            <th>Taken Seats</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
+            var takenSeats = ticketsCount != null && ticketsCount.ContainsKey(item.Id) ? ticketsCount[item.Id] : 0;
+            var totalSeats = item.Hall.Rows * item.Hall.Columns;
+            var availableSeats = totalSeats - takenSeats;
+
             <tr>
                 <td>@item.Movie?.Title</td>
                 <td>@item.Hall?.Name</td>
                 <td>@item.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</td>
                 <td>@item.TicketPrice.ToString("C")</td>
-                <td>@item.AvailableSeats</td>
+                <td>@availableSeats</td>
+                <td>@takenSeats</td>
                 <td>
                     <a asp-controller="Tickets" asp-action="Create" asp-route-projectionId="@item.Id" class="btn btn-success btn-sm">
                         Buy Ticket
