@@ -1,11 +1,14 @@
 ﻿using Cinema.Models;
 using CinemaProjections.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
-namespace Cinema.Controllers
+namespace Cinema.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class HallsController : Controller
     {
         private readonly ApplicationDbContext _context;

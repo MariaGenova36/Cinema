@@ -44,29 +44,20 @@ public class ProfileController : Controller
     [HttpPost]
     public async Task<IActionResult> Index(ProfileViewModel model)
     {
-        if (!ModelState.IsValid)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            ViewBag.Tickets = await GetUserTicketsAsync(user.Id);
-            return View(model);
-        }
+        var user = await _userManager.GetUserAsync(User);
 
-        var userToUpdate = await _userManager.GetUserAsync(User);
-        userToUpdate.FullName = model.FullName;
+        if (user == null)
+            return NotFound();
 
-        var result = await _userManager.UpdateAsync(userToUpdate);
+        user.FullName = model.FullName;
 
-        if (result.Succeeded)
-        {
-            ViewData["Message"] = "Profile updated successfully.";
-            ViewBag.Tickets = await GetUserTicketsAsync(userToUpdate.Id);
-            return View(model);
-        }
+        // директно с контекста, за да заобиколим Identity UpdateAsync
+        _context.Users.Update(user);
+        await _context.SaveChangesAsync();
 
-        foreach (var error in result.Errors)
-            ModelState.AddModelError("", error.Description);
+        ViewData["Message"] = "Profile updated successfully.";
+        ViewBag.Tickets = await GetUserTicketsAsync(user.Id);
 
-        ViewBag.Tickets = await GetUserTicketsAsync(userToUpdate.Id);
         return View(model);
     }
 }

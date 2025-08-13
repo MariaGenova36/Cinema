@@ -5,7 +5,7 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<form asp-action="Register" method="post">
+<form asp-action="Register" method="post" asp-antiforgery="true">
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="form-group">
@@ -24,6 +24,12 @@
         <label asp-for="ConfirmPassword"></label>
         <input asp-for="ConfirmPassword" class="form-control" type="password" />
         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" class="form-control" />
+        <span asp-validation-for="FullName" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Register</button>

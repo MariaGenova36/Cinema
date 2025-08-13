@@ -1,12 +1,15 @@
 ﻿@model Cinema.Models.Movie
 
 @{
-    ViewData["Title"] = "Create Movie";
+    ViewData["Title"] = "Edit Movie";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Create Movie</h1>
+<h1>Edit the movie</h1>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
     <div class="form-group">
         <label asp-for="Title"></label>
         <input asp-for="Title" class="form-control" />
@@ -20,8 +23,8 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="GenreId">Genre</label>
-        <select asp-for="GenreId" class="form-control" asp-items="ViewBag.GenreId"></select>
+        <label asp-for="GenreId" class="control-label"></label>
+        <select asp-for="GenreId" class="form-control" asp-items="ViewBag.Genres"></select>
         <span asp-validation-for="GenreId" class="text-danger"></span>
     </div>
 
@@ -43,13 +46,24 @@
         <span asp-validation-for="PosterFile" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-success">Create</button>
+    @if (!string.IsNullOrEmpty(Model.PosterUrl))
+    {
+        <div class="form-group">
+            <label>Current Poster</label><br />
+            <img src="@Model.PosterUrl" style="height:150px;" />
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>
 
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
 
+
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

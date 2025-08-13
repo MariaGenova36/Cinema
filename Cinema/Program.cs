@@ -1,6 +1,7 @@
 using CinemaProjections.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Cinema
 {
@@ -29,6 +30,15 @@ namespace Cinema
 
             var app = builder.Build();
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+                SeedRolesAsync(roleManager).GetAwaiter().GetResult();
+                SeedAdminAsync(userManager).GetAwaiter().GetResult();
+            }
+
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
@@ -45,11 +55,50 @@ namespace Cinema
 
             app.MapStaticAssets();
             app.MapControllerRoute(
+                name: "areas",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
 
             app.Run();
+
+            async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
+            {
+                string[] roleNames = { "Admin", "User" };
+
+                foreach (var roleName in roleNames)
+                {
+                    if (!await roleManager.RoleExistsAsync(roleName))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole(roleName));
+                    }
+                }
+            }
+
+            async Task SeedAdminAsync(UserManager<ApplicationUser> userManager)
+            {
+                string adminEmail = "admin@cinema.com";
+                string adminPassword = "Admin123!";
+
+                var adminUser = await userManager.FindByEmailAsync(adminEmail);
+                if (adminUser == null)
+                {
+                    var newAdmin = new ApplicationUser
+                    {
+                        UserName = adminEmail,
+                        Email = adminEmail,
+                        FullName = "Cinema Administrator"
+                    };
+
+                    var result = await userManager.CreateAsync(newAdmin, adminPassword);
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(newAdmin, "Admin");
+                    }
+                }
+            }
         }
     }
 }

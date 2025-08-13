@@ -42,6 +42,24 @@ namespace Cinema.Controllers
 
             ViewBag.TakenSeats = takenSeats;
 
+            var user = await _userManager.GetUserAsync(User);
+            bool isAdmin = false;
+            int userTicketsCount = 0;
+
+            if (user != null)
+            {
+                isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+                if (!isAdmin)
+                {
+                    userTicketsCount = await _context.Tickets
+                    .CountAsync(t => t.ProjectionId == projectionId && t.UserId == user.Id);
+                }
+            }
+
+            ViewBag.UserTicketsCount = userTicketsCount;
+            ViewBag.IsAdmin = isAdmin;
+
             return View(new Ticket { ProjectionId = projectionId });
         }
 
@@ -58,6 +76,36 @@ namespace Cinema.Controllers
             if (projection == null)
                 return NotFound();
 
+            // Проверка колко билета вече е резервирал текущият потребител за тази прожекция
+            var user = await _userManager.GetUserAsync(User);
+            bool isAdmin = false;
+            int userTicketsCount = 0;
+
+            if (user != null)
+            {
+                isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+                if (!isAdmin)
+                {
+                    userTicketsCount = await _context.Tickets
+                .CountAsync(t => t.ProjectionId == ticket.ProjectionId && t.UserId == user.Id);
+
+                    // Проверка дали потребителят е резервирал повече от 3 билета за тази прожекция
+                    if (userTicketsCount >= 3)
+                    {
+                        ModelState.AddModelError("", "You cannot reserve more than 3 tickets for this projection.");
+                        ViewBag.Projection = projection;
+                        ViewBag.TakenSeats = await _context.Tickets
+                            .Where(t => t.ProjectionId == ticket.ProjectionId)
+                            .Select(t => new { t.SeatRow, t.SeatColumn })
+                            .ToListAsync();
+                        ViewBag.UserTicketsCount = userTicketsCount;
+                        ViewBag.IsAdmin = isAdmin;
+                        return View(ticket);
+                    }
+                }
+            }
+
             bool isTaken = await _context.Tickets.AnyAsync(t =>
                 t.ProjectionId == ticket.ProjectionId &&
                 t.SeatRow == ticket.SeatRow &&
@@ -71,6 +119,8 @@ namespace Cinema.Controllers
                     .Where(t => t.ProjectionId == ticket.ProjectionId)
                     .Select(t => new { t.SeatRow, t.SeatColumn })
                     .ToListAsync();
+                ViewBag.UserTicketsCount = userTicketsCount;
+                ViewBag.IsAdmin = isAdmin;
 
                 return View(ticket);
             }
@@ -83,11 +133,14 @@ namespace Cinema.Controllers
                     .Where(t => t.ProjectionId == ticket.ProjectionId)
                     .Select(t => new { t.SeatRow, t.SeatColumn })
                     .ToListAsync();
+                ViewBag.UserTicketsCount = userTicketsCount;
+                ViewBag.IsAdmin = isAdmin;
+
                 return View(ticket);
             }
 
+
             // Взимаме текущия логнат потребител и добавяме името му
-            var user = await _userManager.GetUserAsync(User);
             ticket.CustomerName = user.FullName;
             ticket.UserId = user.Id;
             ticket.PurchaseTime = DateTime.UtcNow;
@@ -97,6 +150,7 @@ namespace Cinema.Controllers
 
             return RedirectToAction("Success");
         }
+
         public IActionResult Success()
         {
             return View();

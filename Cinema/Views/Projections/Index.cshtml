@@ -8,7 +8,10 @@
 <h1>Projections</h1>
 
 <p>
-    <a asp-action="Create" class="btn btn-primary">Create New Projection</a>
+    @if (ViewBag.IsAdminView == true)
+    {
+        <a asp-action="Create" class="btn btn-primary">Create New Projection</a>
+    }
 </p>
 
 <table class="table table-striped">
@@ -38,12 +41,18 @@
                 <td>@availableSeats</td>
                 <td>@takenSeats</td>
                 <td>
-                    <a asp-controller="Tickets" asp-action="Create" asp-route-projectionId="@item.Id" class="btn btn-success btn-sm">
-                        Buy Ticket
-                    </a>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    @if (ViewBag.IsAdminView == null || ViewBag.IsAdminView == false)
+                    {
+                        <a asp-controller="Tickets" asp-action="Create" asp-route-projectionId="@item.Id" class="btn btn-success btn-sm">
+                            Buy Ticket
+                        </a>
+                    }
+                    @if (ViewBag.IsAdminView == true)
+                    {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"> Delete |</a>
+                    }
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
                 </td>
             </tr>
         }

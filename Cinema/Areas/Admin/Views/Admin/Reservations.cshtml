@@ -1,0 +1,130 @@
+﻿@model List<Cinema.Models.Ticket>
+@{
+    ViewData["Title"] = "All Reservations";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>All Reservations</h2>
+
+<form method="get" class="mb-3 row">
+    <div class="col-md-4">
+        <input type="text" name="searchTerm" class="form-control" placeholder="Search by movie or user"
+               value="@ViewBag.SearchTerm" />
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>
+                    <a asp-action="Reservations" asp-route-sortOrder="@ViewBag.UserSortParam" asp-route-searchTerm="@ViewBag.SearchTerm">
+                        User
+                        @if (ViewBag.CurrentSort == "user_asc")
+                        {
+                            <span>▲</span>
+                        }
+                        else if (ViewBag.CurrentSort == "user_desc")
+                        {
+
+                            <span>▼</span>
+                        }
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Reservations" asp-route-sortOrder="@ViewBag.MovieSortParam" asp-route-searchTerm="@ViewBag.SearchTerm">
+                        Movie
+                        @if (ViewBag.CurrentSort == "movie_asc")
+                        {
+                            <span>▲</span>
+                        }
+                        else if (ViewBag.CurrentSort == "movie_desc")
+                        {
+
+                            <span>▼</span>
+                        }
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Reservations" asp-route-sortOrder="@ViewBag.DateSortParam" asp-route-searchTerm="@ViewBag.SearchTerm">
+                        Date
+                        @if (ViewBag.CurrentSort == "date_asc")
+                        {
+                            <span>▲</span>
+                        }
+                        else if (ViewBag.CurrentSort == "date_desc")
+                        {
+
+                            <span>▼</span>
+                        }
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Reservations" asp-route-sortOrder="@ViewBag.HallSortParam" asp-route-searchTerm="@ViewBag.SearchTerm">
+                        Hall
+                        @if (ViewBag.CurrentSort == "hall_asc")
+                        {
+                            <span>▲</span>
+                        }
+                        else if (ViewBag.CurrentSort == "hall_desc")
+                        {
+
+                            <span>▼</span>
+                        }
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Reservations" asp-route-sortOrder="@ViewBag.SeatSortParam" asp-route-searchTerm="@ViewBag.SearchTerm">
+                        Seat
+                        @if (ViewBag.CurrentSort == "seat_asc")
+                        {
+                            <span>▲</span>
+                        }
+                        else if (ViewBag.CurrentSort == "seat_desc")
+                        {
+
+                            <span>▼</span>
+                        }
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Reservations" asp-route-sortOrder="@ViewBag.PurchasedSortParam" asp-route-searchTerm="@ViewBag.SearchTerm">
+                        Purchased
+                        @if (ViewBag.CurrentSort == "purchased_asc")
+                        {
+                            <span>▲</span>
+                        }
+                        else if (ViewBag.CurrentSort == "purchased_desc")
+                        {
+
+                            <span>▼</span>
+                        }
+                    </a>
+                </th>
+                <th>Actions</th> <!-- Добавяме колона за бутона -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ticket in Model)
+            {
+                <tr>
+                    <td>@ticket.CustomerName</td>
+                    <td>@ticket.Projection.Movie.Title</td>
+                    <td>@ticket.Projection.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@ticket.Projection.Hall.Name</td>
+                    <td>Row: @ticket.SeatRow, Seat: @ticket.SeatColumn</td>
+                    <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>
+                        <form method="post" asp-action="DeleteReservation" asp-route-id="@ticket.Id" onsubmit="return confirm('Are you sure you want to delete this reservation?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

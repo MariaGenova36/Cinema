@@ -1,0 +1,6 @@
+﻿@model IEnumerable<Cinema.Models.Movie>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@Html.Partial("~/Views/Movies/Index.cshtml", Model)

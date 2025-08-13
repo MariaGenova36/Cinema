@@ -1,5 +1,10 @@
 ﻿@model ProfileViewModel
 
+@if (User.IsInRole("Admin"))
+{
+    <a class="btn btn-secondary mb-3" href="/Admin/Reservations">Go to Admin Panel</a>
+}
+
 <h2>Your Profile</h2>
 
 <form method="post" asp-action="Index">

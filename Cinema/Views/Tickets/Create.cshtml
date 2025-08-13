@@ -3,9 +3,15 @@
 @{
     ViewData["Title"] = "Reserve Seat";
     var projection = ViewBag.Projection as Cinema.Models.Projection;
-    // Ако ViewBag.TakenSeats е null, ползвай празна колекция.
+    if (projection == null)
+    {
+        <div class="alert alert-danger">Projection not found.</div>
+        return;
+    }
+
     var takenSeats = (ViewBag.TakenSeats as IEnumerable<dynamic>) ?? Enumerable.Empty<dynamic>();
 }
+
 <h2>Reserve a Seat</h2>
 
 <div class="mb-3">
@@ -14,7 +20,15 @@
     <strong>Hall:</strong> @projection.Hall.Name
 </div>
 
-<form asp-action="Create" method="post">
+@if (!(ViewBag.IsAdmin as bool? ?? false) && (ViewBag.UserTicketsCount as int? ?? 0) >= 3)
+{
+    <div class="alert alert-warning">
+        You have already reserved the maximum of 3 tickets for this projection.
+    </div>
+}
+else
+{
+<form asp-action="Create" method="post" onsubmit="return validateSeatSelection();">
     <input type="hidden" asp-for="ProjectionId" />
     <input type="hidden" id="SeatRow" name="SeatRow" />
     <input type="hidden" id="SeatColumn" name="SeatColumn" />
@@ -38,14 +52,13 @@
 
                         if (isTaken)
                         {
-                            <button type="button" class="btn btn-danger btn-sm me-1 mb-1" disabled>
+                                <button type="button" class="seat-btn seat-taken" disabled>
                                 @row-@col
                             </button>
                         }
                         else
                         {
-                            <button type="button" class="btn btn-outline-success btn-sm me-1 mb-1 seat-btn"
-                                    data-row="@row" data-col="@col">
+                                <button type="button" class="seat-btn seat-available" data-row="@row" data-col="@col">
                                 @row-@col
                             </button>
                         }
@@ -60,24 +73,4 @@
         <a asp-controller="Projections" asp-action="Index" class="btn btn-secondary">Cancel</a>
     </div>
 </form>
-
-
-@section Scripts {
-    <script>
-        const seatButtons = document.querySelectorAll('.seat-btn');
-        const seatRowInput = document.getElementById('SeatRow');
-        const seatColInput = document.getElementById('SeatColumn');
-
-        seatButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Clear old selection
-                seatButtons.forEach(b => b.classList.remove('btn-success'));
-                btn.classList.add('btn-success');
-
-                // Set selected seat values
-                seatRowInput.value = btn.dataset.row;
-                seatColInput.value = btn.dataset.col;
-            });
-        });
-    </script>
 }
