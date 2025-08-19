@@ -30,5 +30,9 @@ namespace Cinema.Models
         [Required]
         [Range(1, 50)]
         public int SeatColumn { get; set; }
-    }
+
+
+        public string TicketType { get; set; }
+        public decimal Price { get; set; }
+}
 }

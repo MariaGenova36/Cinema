@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 
 namespace Cinema.Controllers
 {
@@ -60,23 +62,39 @@ namespace Cinema.Controllers
             ViewBag.UserTicketsCount = userTicketsCount;
             ViewBag.IsAdmin = isAdmin;
 
-            return View(new Ticket { ProjectionId = projectionId });
+            // типовете билети и множители
+            ViewBag.TicketTypes = new List<dynamic>
+    {
+        new { Name = "Редовен", Multiplier = 1.0m },
+        new { Name = "Дете", Multiplier = 0.5m },
+        new { Name = "Студент", Multiplier = 0.75m }
+    };
+
+            // добавяме базова цена по подразбиране за "Редовен" билет
+            ViewBag.BaseTicketPrice = projection.TicketPrice;
+            var defaultTicket = new Ticket
+            {
+                ProjectionId = projectionId,
+                TicketType = "Редовен",
+                Price = projection.TicketPrice // редовна цена по подразбиране
+            };
+
+            return View(defaultTicket);
         }
 
-        // POST: Tickets/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Create(Ticket ticket)
+        public async Task<IActionResult> Create(int ProjectionId, string SeatRows, string SeatCols, string TicketType, string TicketMultiplier)
         {
             var projection = await _context.Projections
                 .Include(p => p.Hall)
-                .FirstOrDefaultAsync(p => p.Id == ticket.ProjectionId);
+                .Include(p => p.Movie)
+                .FirstOrDefaultAsync(p => p.Id == ProjectionId);
 
             if (projection == null)
                 return NotFound();
 
-            // Проверка колко билета вече е резервирал текущият потребител за тази прожекция
             var user = await _userManager.GetUserAsync(User);
             bool isAdmin = false;
             int userTicketsCount = 0;
@@ -84,71 +102,78 @@ namespace Cinema.Controllers
             if (user != null)
             {
                 isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
-
                 if (!isAdmin)
                 {
                     userTicketsCount = await _context.Tickets
-                .CountAsync(t => t.ProjectionId == ticket.ProjectionId && t.UserId == user.Id);
-
-                    // Проверка дали потребителят е резервирал повече от 3 билета за тази прожекция
-                    if (userTicketsCount >= 3)
-                    {
-                        ModelState.AddModelError("", "You cannot reserve more than 3 tickets for this projection.");
-                        ViewBag.Projection = projection;
-                        ViewBag.TakenSeats = await _context.Tickets
-                            .Where(t => t.ProjectionId == ticket.ProjectionId)
-                            .Select(t => new { t.SeatRow, t.SeatColumn })
-                            .ToListAsync();
-                        ViewBag.UserTicketsCount = userTicketsCount;
-                        ViewBag.IsAdmin = isAdmin;
-                        return View(ticket);
-                    }
+                        .CountAsync(t => t.ProjectionId == ProjectionId && t.UserId == user.Id);
                 }
             }
 
-            bool isTaken = await _context.Tickets.AnyAsync(t =>
-                t.ProjectionId == ticket.ProjectionId &&
-                t.SeatRow == ticket.SeatRow &&
-                t.SeatColumn == ticket.SeatColumn);
+            var rows = JsonConvert.DeserializeObject<List<int>>(SeatRows);
+            var cols = JsonConvert.DeserializeObject<List<int>>(SeatCols);
 
-            if (isTaken)
+            if (rows.Count != cols.Count || rows.Count == 0)
             {
-                ModelState.AddModelError("", "This seat is already taken.");
-                ViewBag.Projection = projection;
-                ViewBag.TakenSeats = await _context.Tickets
-                    .Where(t => t.ProjectionId == ticket.ProjectionId)
-                    .Select(t => new { t.SeatRow, t.SeatColumn })
-                    .ToListAsync();
-                ViewBag.UserTicketsCount = userTicketsCount;
-                ViewBag.IsAdmin = isAdmin;
-
-                return View(ticket);
+                ModelState.AddModelError("", "Invalid seat selection.");
+                await LoadViewBags(projection, ProjectionId, userTicketsCount, isAdmin);
+                return View(new Ticket { ProjectionId = ProjectionId });
             }
 
-            if (ticket.SeatRow < 1 || ticket.SeatRow > projection.Hall.Rows || ticket.SeatColumn < 1 || ticket.SeatColumn > projection.Hall.Columns)
+            if (!isAdmin && (userTicketsCount + rows.Count) > 3)
             {
-                ModelState.AddModelError("", "This seat does not exist.");
-                ViewBag.Projection = projection;
-                ViewBag.TakenSeats = await _context.Tickets
-                    .Where(t => t.ProjectionId == ticket.ProjectionId)
-                    .Select(t => new { t.SeatRow, t.SeatColumn })
-                    .ToListAsync();
-                ViewBag.UserTicketsCount = userTicketsCount;
-                ViewBag.IsAdmin = isAdmin;
-
-                return View(ticket);
+                ModelState.AddModelError("", "You cannot reserve more than 3 tickets for this projection.");
+                await LoadViewBags(projection, ProjectionId, userTicketsCount, isAdmin);
+                return View(new Ticket { ProjectionId = ProjectionId });
             }
 
+            // Парсваме multiplier с InvariantCulture
+            var multiplier = decimal.Parse(TicketMultiplier, CultureInfo.InvariantCulture);
 
-            // Взимаме текущия логнат потребител и добавяме името му
-            ticket.CustomerName = user.FullName;
-            ticket.UserId = user.Id;
-            ticket.PurchaseTime = DateTime.UtcNow;
+            for (int i = 0; i < rows.Count; i++)
+            {
+                int row = rows[i];
+                int col = cols[i];
 
-            _context.Tickets.Add(ticket);
+                bool isTaken = await _context.Tickets.AnyAsync(t =>
+                    t.ProjectionId == ProjectionId &&
+                    t.SeatRow == row &&
+                    t.SeatColumn == col);
+
+                if (isTaken)
+                {
+                    ModelState.AddModelError("", $"Seat {row}-{col} is already taken.");
+                    await LoadViewBags(projection, ProjectionId, userTicketsCount, isAdmin);
+                    return View(new Ticket { ProjectionId = ProjectionId });
+                }
+
+                var ticket = new Ticket
+                {
+                    ProjectionId = ProjectionId,
+                    SeatRow = row,
+                    SeatColumn = col,
+                    CustomerName = user.FullName,
+                    UserId = user.Id,
+                    PurchaseTime = DateTime.UtcNow,
+                    TicketType = TicketType,
+                    Price = projection.TicketPrice * multiplier
+                };
+
+                _context.Tickets.Add(ticket);
+            }
+
             await _context.SaveChangesAsync();
-
             return RedirectToAction("Success");
+        }
+
+        private async Task LoadViewBags(Projection projection, int projectionId, int userTicketsCount, bool isAdmin)
+        {
+            ViewBag.Projection = projection;
+            ViewBag.TakenSeats = await _context.Tickets
+                .Where(t => t.ProjectionId == projectionId)
+                .Select(t => new { t.SeatRow, t.SeatColumn })
+                .ToListAsync();
+            ViewBag.UserTicketsCount = userTicketsCount;
+            ViewBag.IsAdmin = isAdmin;
         }
 
         public IActionResult Success()

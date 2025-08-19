@@ -29,7 +29,6 @@
                         }
                         else if (ViewBag.CurrentSort == "user_desc")
                         {
-
                             <span>▼</span>
                         }
                     </a>
@@ -43,7 +42,6 @@
                         }
                         else if (ViewBag.CurrentSort == "movie_desc")
                         {
-
                             <span>▼</span>
                         }
                     </a>
@@ -57,7 +55,6 @@
                         }
                         else if (ViewBag.CurrentSort == "date_desc")
                         {
-
                             <span>▼</span>
                         }
                     </a>
@@ -71,7 +68,6 @@
                         }
                         else if (ViewBag.CurrentSort == "hall_desc")
                         {
-
                             <span>▼</span>
                         }
                     </a>
@@ -85,7 +81,6 @@
                         }
                         else if (ViewBag.CurrentSort == "seat_desc")
                         {
-
                             <span>▼</span>
                         }
                     </a>
@@ -99,12 +94,24 @@
                         }
                         else if (ViewBag.CurrentSort == "purchased_desc")
                         {
-
                             <span>▼</span>
                         }
                     </a>
                 </th>
-                <th>Actions</th> <!-- Добавяме колона за бутона -->
+                <th>
+                    <a asp-action="Reservations" asp-route-sortOrder="@ViewBag.TicketSortParam" asp-route-searchTerm="@ViewBag.SearchTerm">
+                        Ticket Type / Price
+                        @if (ViewBag.CurrentSort == "ticket_asc")
+                        {
+                            <span>▲</span>
+                        }
+                        else if (ViewBag.CurrentSort == "ticket_desc")
+                        {
+                            <span>▼</span>
+                        }
+                    </a>
+                </th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -117,6 +124,7 @@
                     <td>@ticket.Projection.Hall.Name</td>
                     <td>Row: @ticket.SeatRow, Seat: @ticket.SeatColumn</td>
                     <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@ticket.TicketType / @ticket.Price.ToString("C")</td>
                     <td>
                         <form method="post" asp-action="DeleteReservation" asp-route-id="@ticket.Id" onsubmit="return confirm('Are you sure you want to delete this reservation?');">
                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
@@ -127,4 +135,3 @@
         </tbody>
     </table>
 </div>
-

@@ -1,76 +1,96 @@
-﻿@model Cinema.Models.Ticket
+﻿    @model Cinema.Models.Ticket
 
-@{
-    ViewData["Title"] = "Reserve Seat";
-    var projection = ViewBag.Projection as Cinema.Models.Projection;
-    if (projection == null)
-    {
-        <div class="alert alert-danger">Projection not found.</div>
-        return;
+    @{
+        ViewData["Title"] = "Reserve Seat";
+        var projection = ViewBag.Projection as Cinema.Models.Projection;
+        if (projection == null)
+        {
+            <div class="alert alert-danger">Projection not found.</div>
+            return;
+        }
+
+        var takenSeats = (ViewBag.TakenSeats as IEnumerable<dynamic>) ?? Enumerable.Empty<dynamic>();
     }
 
-    var takenSeats = (ViewBag.TakenSeats as IEnumerable<dynamic>) ?? Enumerable.Empty<dynamic>();
-}
+    <h2>Reserve a Seat</h2>
 
-<h2>Reserve a Seat</h2>
-
-<div class="mb-3">
-    <strong>Movie:</strong> @projection.Movie.Title <br />
-    <strong>Time:</strong> @projection.ProjectionTime.ToString("dd.MM.yyyy HH:mm") <br />
-    <strong>Hall:</strong> @projection.Hall.Name
-</div>
-
-@if (!(ViewBag.IsAdmin as bool? ?? false) && (ViewBag.UserTicketsCount as int? ?? 0) >= 3)
-{
-    <div class="alert alert-warning">
-        You have already reserved the maximum of 3 tickets for this projection.
-    </div>
-}
-else
-{
-<form asp-action="Create" method="post" onsubmit="return validateSeatSelection();">
-    <input type="hidden" asp-for="ProjectionId" />
-    <input type="hidden" id="SeatRow" name="SeatRow" />
-    <input type="hidden" id="SeatColumn" name="SeatColumn" />
-
-    <h4>Select a Seat</h4>
-
-    <!-- ЕКРАН -->
-    <div class="screen-indicator mb-3 text-center p-2 bg-secondary text-white rounded">
-        ЕКРАН
+    <div class="mb-3">
+        <strong>Movie:</strong> @projection.Movie.Title <br />
+        <strong>Time:</strong> @projection.ProjectionTime.ToString("dd.MM.yyyy HH:mm") <br />
+        <strong>Hall:</strong> @projection.Hall.Name
     </div>
 
-    <!-- СЕДАЛКИ -->
-    <div class="d-flex justify-content-center">
-        <div class="seat-grid-wrapper mb-3 p-3 bg-light border rounded">
-            @for (int row = 1; row <= projection.Hall.Rows; row++)
-            {
-                <div class="d-flex mb-1">
-                    @for (int col = 1; col <= projection.Hall.Columns; col++)
+    @if (!(ViewBag.IsAdmin as bool? ?? false) && (ViewBag.UserTicketsCount as int? ?? 0) >= 3)
+    {
+        <div class="alert alert-warning">
+            You have already reserved the maximum of 3 tickets for this projection.
+        </div>
+    }
+    else
+    {
+        <form asp-action="Create" method="post" onsubmit="return validateSeatSelection();">
+            <input type="hidden" asp-for="ProjectionId" />
+            <input type="hidden" id="SeatRows" name="SeatRows" />
+            <input type="hidden" id="SeatCols" name="SeatCols" />
+        <input type="hidden" id="TicketMultiplier" name="TicketMultiplier" value="1" />
+
+            <h4>Select Seats</h4>
+
+            <div class="screen-indicator mb-3 text-center p-2 bg-secondary text-white rounded">
+                ЕКРАН
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <div class="seat-grid-wrapper mb-3 p-3 bg-light border rounded">
+                    @for (int row = 1; row <= projection.Hall.Rows; row++)
                     {
-                        bool isTaken = takenSeats.Any(s => (int)s.SeatRow == row && (int)s.SeatColumn == col);
+                        <div class="seat-row">
+                            @for (int col = 1; col <= projection.Hall.Columns; col++)
+                            {
+                                bool isTaken = takenSeats.Any(s => (int)s.SeatRow == row && (int)s.SeatColumn == col);
 
-                        if (isTaken)
-                        {
-                                <button type="button" class="seat-btn seat-taken" disabled>
-                                @row-@col
-                            </button>
-                        }
-                        else
-                        {
-                                <button type="button" class="seat-btn seat-available" data-row="@row" data-col="@col">
-                                @row-@col
-                            </button>
-                        }
+                                if (isTaken)
+                                {
+                                    <button type="button" class="seat-btn seat-taken" disabled>@row-@col</button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="seat-btn seat-available" data-row="@row" data-col="@col">@row-@col</button>
+                                }
+                            }
+                        </div>
                     }
                 </div>
-            }
-        </div>
-    </div>
+            </div>
 
-    <div class="mt-3">
-        <button type="submit" class="btn btn-primary">Reserve</button>
-        <a asp-controller="Projections" asp-action="Index" class="btn btn-secondary">Cancel</a>
-    </div>
-</form>
-}
+        <div class="mt-3">
+            <label>Тип билет:</label>
+            <select id="ticketTypeSelect" name="TicketType" class="form-select w-auto d-inline-block">
+                @foreach (var type in ViewBag.TicketTypes as IEnumerable<dynamic>)
+                {
+                    <option value="@type.Name"
+                            data-multiplier="@type.Multiplier.ToString(System.Globalization.CultureInfo.InvariantCulture)">
+                        @type.Name
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="mt-2">
+            <strong>Price:</strong>
+            <span id="ticketPrice"
+                  data-baseprice="@projection.TicketPrice.ToString(System.Globalization.CultureInfo.InvariantCulture)">
+            </span>
+        </div>
+
+
+
+
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Reserve</button>
+                <a asp-controller="Projections" asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+
+
+    }

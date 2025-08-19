@@ -47,8 +47,18 @@ body {
     text-align: center;
 }
 
+.seat-grid-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4px; 
+    justify-content: center;
+    align-items: center;
+}
+
+
 .seat-row {
-    width: 100%;
+    display: flex;
+    gap: 4px; 
 }
 
 .seat-btn {

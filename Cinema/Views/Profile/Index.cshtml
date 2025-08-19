@@ -42,6 +42,8 @@
                 <th>Projection Date</th>
                 <th>Seat Number</th>
                 <th>Purchase Time</th>
+                <th>Ticket Type</th>
+                <th>Price</th>
             </tr>
         </thead>
         <tbody>
@@ -52,6 +54,8 @@
                     <td>@ticket.Projection.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</td>
                     <td>Row: @ticket.SeatRow, Seat: @ticket.SeatColumn</td>
                     <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                    <td>@ticket.TicketType</td>
+                    <td>@ticket.Price.ToString("C")</td>
                 </tr>
             }
         </tbody>

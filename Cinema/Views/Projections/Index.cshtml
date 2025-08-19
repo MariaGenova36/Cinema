@@ -37,7 +37,22 @@
                 <td>@item.Movie?.Title</td>
                 <td>@item.Hall?.Name</td>
                 <td>@item.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</td>
-                <td>@item.TicketPrice.ToString("C")</td>
+                <td>
+                    @{
+                        var basePrice = item.TicketPrice;
+                        var ticketTypes = new List<(string Name, decimal Multiplier)>
+                                {
+                                ("Редовен", 1.0m),
+                                ("Дете", 0.5m),
+                                ("Студент", 0.75m)
+                                };
+                    }
+                    @foreach (var type in ticketTypes)
+                    {
+                        var finalPrice = basePrice * type.Multiplier;
+                        <div>@type.Name: @finalPrice.ToString("C")</div>
+                    }
+                </td>
                 <td>@availableSeats</td>
                 <td>@takenSeats</td>
                 <td>

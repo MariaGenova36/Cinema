@@ -1,42 +1,61 @@
 ﻿document.addEventListener('DOMContentLoaded', function () {
-    const seatButtons = document.querySelectorAll('.seat-btn');
-    const seatRowInput = document.getElementById('SeatRow');
-    const seatColInput = document.getElementById('SeatColumn');
+    const seatButtons = document.querySelectorAll('.seat-btn.seat-available');
+    const seatRowsInput = document.getElementById('SeatRows');
+    const seatColsInput = document.getElementById('SeatCols');
+    const ticketTypeSelect = document.getElementById('ticketTypeSelect');
+    const ticketMultiplierInput = document.getElementById('TicketMultiplier');
+    const priceSpan = document.getElementById('ticketPrice');
 
-    if (!seatButtons || !seatRowInput || !seatColInput) return;
+    let selectedSeats = [];
 
     seatButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            const isSelected = btn.classList.contains('seat-selected');
+            const row = parseInt(btn.dataset.row);
+            const col = parseInt(btn.dataset.col);
+            const index = selectedSeats.findIndex(s => s.row === row && s.col === col);
 
-            // Де-селекция при повторно кликване
-            if (isSelected) {
+            if (index >= 0) {
+                selectedSeats.splice(index, 1);
                 btn.classList.remove('seat-selected');
-                seatRowInput.value = '';
-                seatColInput.value = '';
             } else {
-                // Премахваме селекцията от всички останали
-                seatButtons.forEach(b => b.classList.remove('seat-selected'));
-
-                // Селектираме текущия
+                selectedSeats.push({ row, col });
                 btn.classList.add('seat-selected');
-                seatRowInput.value = btn.dataset.row;
-                seatColInput.value = btn.dataset.col;
             }
+
+            seatRowsInput.value = JSON.stringify(selectedSeats.map(s => s.row));
+            seatColsInput.value = JSON.stringify(selectedSeats.map(s => s.col));
+
+            updatePrice();
         });
     });
 
-    // Валидация при submit
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', function (e) {
-            const seatRow = seatRowInput.value;
-            const seatCol = seatColInput.value;
-
-            if (!seatRow || !seatCol) {
-                e.preventDefault();
-                alert("Please choose a seat before making a reservation.");
-            }
-        });
+    if (ticketTypeSelect) {
+        ticketTypeSelect.addEventListener('change', updatePrice);
     }
+
+    function updatePrice() {
+        if (!priceSpan) return;
+
+        const basePrice = parseFloat(priceSpan.dataset.baseprice);
+        const multiplier = parseFloat(ticketTypeSelect.selectedOptions[0].dataset.multiplier);
+        const seatsCount = selectedSeats.length || 1;
+        const totalPrice = basePrice * multiplier * seatsCount;
+
+        priceSpan.textContent = totalPrice.toFixed(2) + " лв.";
+
+        // Винаги записваме с точка, за да не зависи от културата
+        if (ticketMultiplierInput) {
+            ticketMultiplierInput.value = multiplier.toString();
+        }
+    }
+
+    window.validateSeatSelection = function () {
+        if (selectedSeats.length === 0) {
+            alert("Please select at least one seat.");
+            return false;
+        }
+        return true;
+    }
+
+    updatePrice();
 });

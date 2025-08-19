@@ -47,6 +47,7 @@ namespace Cinema.Areas.Admin.Controllers
             ViewBag.HallSortParam = sortOrder == "hall_asc" ? "hall_desc" : "hall_asc";
             ViewBag.SeatSortParam = sortOrder == "seat_asc" ? "seat_desc" : "seat_asc";
             ViewBag.PurchasedSortParam = sortOrder == "purchased_asc" ? "purchased_desc" : "purchased_asc";
+            ViewBag.TicketSortParam = sortOrder == "ticket_asc" ? "ticket_desc" : "ticket_asc";
 
             // Сортиране според избраната колона
             tickets = sortOrder switch
@@ -69,11 +70,15 @@ namespace Cinema.Areas.Admin.Controllers
                 "purchased_desc" => tickets.OrderByDescending(t => t.PurchaseTime),
                 "purchased_asc" => tickets.OrderBy(t => t.PurchaseTime),
 
+                "ticket_desc" => tickets.OrderByDescending(t => t.Price).ThenByDescending(t => t.TicketType),
+                "ticket_asc" => tickets.OrderBy(t => t.Price).ThenBy(t => t.TicketType),
+
                 _ => tickets.OrderBy(t => t.Projection.ProjectionTime)
             };
 
             return View(await tickets.ToListAsync());
         }
+
 
         [HttpPost]
         public async Task<IActionResult> DeleteReservation(int id)
