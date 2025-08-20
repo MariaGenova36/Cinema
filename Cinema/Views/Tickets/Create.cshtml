@@ -28,7 +28,7 @@
     }
     else
     {
-        <form asp-action="Create" method="post" onsubmit="return validateSeatSelection();">
+    <form asp-action="CreateTemp" method="post" onsubmit="return validateSeatSelection();">
             <input type="hidden" asp-for="ProjectionId" />
             <input type="hidden" id="SeatRows" name="SeatRows" />
             <input type="hidden" id="SeatCols" name="SeatCols" />
@@ -64,7 +64,7 @@
             </div>
 
         <div class="mt-3">
-            <label>Тип билет:</label>
+            <label>Type of ticket:</label>
             <select id="ticketTypeSelect" name="TicketType" class="form-select w-auto d-inline-block">
                 @foreach (var type in ViewBag.TicketTypes as IEnumerable<dynamic>)
                 {

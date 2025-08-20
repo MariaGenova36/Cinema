@@ -65,9 +65,9 @@ namespace Cinema.Controllers
             // типовете билети и множители
             ViewBag.TicketTypes = new List<dynamic>
     {
-        new { Name = "Редовен", Multiplier = 1.0m },
-        new { Name = "Дете", Multiplier = 0.5m },
-        new { Name = "Студент", Multiplier = 0.75m }
+        new { Name = "Regular", Multiplier = 1.0m },
+        new { Name = "Kid", Multiplier = 0.5m },
+        new { Name = "Student", Multiplier = 0.75m }
     };
 
             // добавяме базова цена по подразбиране за "Редовен" билет
@@ -75,7 +75,7 @@ namespace Cinema.Controllers
             var defaultTicket = new Ticket
             {
                 ProjectionId = projectionId,
-                TicketType = "Редовен",
+                TicketType = "Regular",
                 Price = projection.TicketPrice // редовна цена по подразбиране
             };
 
@@ -174,6 +174,81 @@ namespace Cinema.Controllers
                 .ToListAsync();
             ViewBag.UserTicketsCount = userTicketsCount;
             ViewBag.IsAdmin = isAdmin;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public IActionResult CreateTemp(int ProjectionId, string SeatRows, string SeatCols, string TicketType, string TicketMultiplier)
+        {
+            var rows = JsonConvert.DeserializeObject<List<int>>(SeatRows);
+            var cols = JsonConvert.DeserializeObject<List<int>>(SeatCols);
+
+            TempData["ProjectionId"] = ProjectionId;
+            TempData["SeatRows"] = SeatRows;
+            TempData["SeatCols"] = SeatCols;
+            TempData["TicketType"] = TicketType;
+            TempData["TicketMultiplier"] = TicketMultiplier;
+
+            return RedirectToAction("Checkout");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Checkout()
+        {
+            if (TempData["ProjectionId"] == null) return RedirectToAction("Index", "Projections");
+
+            int projectionId = int.Parse(TempData["ProjectionId"].ToString()!);
+            var projection = await _context.Projections
+                .Include(p => p.Movie)
+                .Include(p => p.Hall)
+                .FirstOrDefaultAsync(p => p.Id == projectionId);
+
+            ViewBag.Projection = projection;
+            ViewBag.SeatRows = JsonConvert.DeserializeObject<List<int>>(TempData["SeatRows"].ToString()!);
+            ViewBag.SeatCols = JsonConvert.DeserializeObject<List<int>>(TempData["SeatCols"].ToString()!);
+            ViewBag.TicketType = TempData["TicketType"]?.ToString();
+            ViewBag.TicketMultiplier = TempData["TicketMultiplier"]?.ToString();
+
+            // запазваме TempData за ConfirmCheckout
+            TempData.Keep();
+
+            return View();
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ConfirmCheckout()
+        {
+            int projectionId = int.Parse(TempData["ProjectionId"].ToString()!);
+            var projection = await _context.Projections.FindAsync(projectionId);
+            var rows = JsonConvert.DeserializeObject<List<int>>(TempData["SeatRows"].ToString()!);
+            var cols = JsonConvert.DeserializeObject<List<int>>(TempData["SeatCols"].ToString()!);
+            string ticketType = TempData["TicketType"].ToString();
+            var multiplier = decimal.Parse(TempData["TicketMultiplier"].ToString()!, CultureInfo.InvariantCulture);
+
+            var user = await _userManager.GetUserAsync(User);
+
+            for (int i = 0; i < rows.Count; i++)
+            {
+                var ticket = new Ticket
+                {
+                    ProjectionId = projectionId,
+                    SeatRow = rows[i],
+                    SeatColumn = cols[i],
+                    CustomerName = user.FullName,
+                    UserId = user.Id,
+                    TicketType = ticketType,
+                    Price = projection.TicketPrice * multiplier,
+                    IsPaid = true,
+                    PurchaseTime = DateTime.UtcNow
+                };
+
+                _context.Tickets.Add(ticket);
+            }
+
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Success");
         }
 
         public IActionResult Success()

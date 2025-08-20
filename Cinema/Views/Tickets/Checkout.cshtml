@@ -1,0 +1,43 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+
+    var projection = ViewBag.Projection as Cinema.Models.Projection;
+    var rows = ViewBag.SeatRows as List<int>;
+    var cols = ViewBag.SeatCols as List<int>;
+    var type = ViewBag.TicketType as string;
+    var multiplier = decimal.Parse(
+        ViewBag.TicketMultiplier as string,
+        System.Globalization.CultureInfo.InvariantCulture
+    );
+
+    var pricePerTicket = projection.TicketPrice * multiplier;
+    var total = rows.Count * pricePerTicket;
+}
+
+<h2>Checkout</h2>
+
+<div class="card shadow p-4 mb-3">
+    <h4>Movie Details</h4>
+    <p><strong>Movie:</strong> @projection.Movie.Title</p>
+    <p><strong>Time:</strong> @projection.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</p>
+    <p><strong>Hall:</strong> @projection.Hall.Name</p>
+</div>
+
+<div class="card shadow p-4 mb-3">
+    <h4>Your Selection</h4>
+    <p><strong>Ticket type:</strong> @type</p>
+    <p><strong>Seats:</strong></p>
+    <ul>
+        @for (int i = 0; i < rows.Count; i++)
+        {
+            <li>Row: @rows[i], Seat: @cols[i]</li>
+        }
+    </ul>
+    <p><strong>Price per ticket:</strong> @pricePerTicket.ToString("F2") лв.</p>
+    <h5>Total: @total.ToString("F2") лв.</h5>
+</div>
+
+<form asp-action="ConfirmCheckout" method="post">
+    <button type="submit" class="btn btn-success">Confirm & Pay</button>
+    <a asp-action="Create" asp-route-projectionId="@projection.Id" class="btn btn-secondary">Cancel</a>
+</form>

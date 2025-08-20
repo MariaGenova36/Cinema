@@ -34,5 +34,7 @@ namespace Cinema.Models
 
         public string TicketType { get; set; }
         public decimal Price { get; set; }
-}
+
+        public bool IsPaid { get; set; } = false;
+    }
 }
