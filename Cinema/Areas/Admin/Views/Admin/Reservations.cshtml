@@ -111,6 +111,19 @@
                         }
                     </a>
                 </th>
+                <th>
+                    <a asp-action="Reservations" asp-route-sortOrder="@ViewBag.IsPaidSortParam" asp-route-searchTerm="@ViewBag.SearchTerm">
+                        Paid
+                        @if (ViewBag.CurrentSort == "paid_asc")
+                        {
+                            <span>▲</span>
+                        }
+                        else if (ViewBag.CurrentSort == "paid_desc")
+                        {
+                            <span>▼</span>
+                        }
+                    </a>
+                </th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -125,6 +138,7 @@
                     <td>Row: @ticket.SeatRow, Seat: @ticket.SeatColumn</td>
                     <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
                     <td>@ticket.TicketType / @ticket.Price.ToString("C")</td>
+                    <td>@(ticket.IsPaid ? "Yes" : "No")</td>
                     <td>
                         <form method="post" asp-action="DeleteReservation" asp-route-id="@ticket.Id" onsubmit="return confirm('Are you sure you want to delete this reservation?');">
                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>

@@ -48,6 +48,7 @@ namespace Cinema.Areas.Admin.Controllers
             ViewBag.SeatSortParam = sortOrder == "seat_asc" ? "seat_desc" : "seat_asc";
             ViewBag.PurchasedSortParam = sortOrder == "purchased_asc" ? "purchased_desc" : "purchased_asc";
             ViewBag.TicketSortParam = sortOrder == "ticket_asc" ? "ticket_desc" : "ticket_asc";
+            ViewBag.IsPaidSortParam = sortOrder == "paid_asc" ? "paid_desc" : "paid_asc";
 
             // Сортиране според избраната колона
             tickets = sortOrder switch
@@ -72,6 +73,9 @@ namespace Cinema.Areas.Admin.Controllers
 
                 "ticket_desc" => tickets.OrderByDescending(t => t.Price).ThenByDescending(t => t.TicketType),
                 "ticket_asc" => tickets.OrderBy(t => t.Price).ThenBy(t => t.TicketType),
+
+                "paid_desc" => tickets.OrderByDescending(t => t.IsPaid),
+                "paid_asc" => tickets.OrderBy(t => t.IsPaid),
 
                 _ => tickets.OrderBy(t => t.Projection.ProjectionTime)
             };

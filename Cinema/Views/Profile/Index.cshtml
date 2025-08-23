@@ -44,6 +44,7 @@
                 <th>Purchase Time</th>
                 <th>Ticket Type</th>
                 <th>Price</th>
+                <th>Paid</th>
             </tr>
         </thead>
         <tbody>
@@ -56,6 +57,7 @@
                     <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
                     <td>@ticket.TicketType</td>
                     <td>@ticket.Price.ToString("C")</td>
+                    <td>@(ticket.IsPaid ? "Yes" : "No")</td>
                 </tr>
             }
         </tbody>

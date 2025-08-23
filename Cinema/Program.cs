@@ -1,5 +1,7 @@
+using Cinema.Services;
 using CinemaProjections.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +12,8 @@ namespace Cinema
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>

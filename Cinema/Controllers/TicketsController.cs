@@ -1,7 +1,9 @@
 ﻿using Cinema.Models;
+using Cinema.Services;
 using CinemaProjections.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -16,11 +18,13 @@ namespace Cinema.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailSender _emailSender;
 
-        public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public TicketsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IEmailSender emailSender)
         {
             _context = context;
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         // GET: Tickets/Create?projectionId=5
@@ -221,7 +225,10 @@ namespace Cinema.Controllers
         public async Task<IActionResult> ConfirmCheckout()
         {
             int projectionId = int.Parse(TempData["ProjectionId"].ToString()!);
-            var projection = await _context.Projections.FindAsync(projectionId);
+            var projection = await _context.Projections
+    .Include(p => p.Movie)
+    .Include(p => p.Hall)
+    .FirstOrDefaultAsync(p => p.Id == projectionId);
             var rows = JsonConvert.DeserializeObject<List<int>>(TempData["SeatRows"].ToString()!);
             var cols = JsonConvert.DeserializeObject<List<int>>(TempData["SeatCols"].ToString()!);
             string ticketType = TempData["TicketType"].ToString();
@@ -248,6 +255,33 @@ namespace Cinema.Controllers
             }
 
             await _context.SaveChangesAsync();
+
+            // Проверка за projection и Movie
+            if (projection == null || projection.Movie == null || projection.Hall == null)
+            {
+                // Не можем да изпратим имейл, просто продължаваме към Success
+                return RedirectToAction("Success");
+            }
+
+            // Проверка за потребител и имейл
+            if (user == null || string.IsNullOrEmpty(user.Email))
+            {
+                return RedirectToAction("Success");
+            }
+
+            // Изпращане на потвърдителен имейл
+            string emailBody = $@"
+        <h3>Reservation Confirmed!</h3>
+        <p>Movie: {projection.Movie.Title}</p>
+        <p>Time: {projection.ProjectionTime:dd.MM.yyyy HH:mm}</p>
+        <p>Hall: {projection.Hall.Name}</p>
+        <p>Ticket type: {ticketType}</p>
+        <p>Seats: {string.Join(", ", rows.Select((r, i) => $"Row {r}, Seat {cols[i]}"))}</p>
+        <p>Total: {(projection.TicketPrice * multiplier * rows.Count):F2} лв.</p>
+    ";
+
+            await _emailSender.SendEmailAsync(user.Email, "Cinema Reservation Confirmation", emailBody);
+
             return RedirectToAction("Success");
         }
 
