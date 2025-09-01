@@ -2,23 +2,25 @@
     ViewData["Title"] = "Success";
 }
 
-<div class="d-flex justify-content-center mt-5">
-    <div class="card shadow-lg p-4 text-center" style="max-width: 600px;">
+<link rel="stylesheet" href="~/css/success.css" />
+
+<div class="success-container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-5 text-center success-card fade-up">
         <div class="mb-3">
             <span class="display-1 text-success">✔</span>
         </div>
-        <h2 class="text-success">Reservation Confirmed!</h2>
-        <p class="lead">Thank you for your reservation. Your ticket is now active.</p>
+        <h2 class="text-success mb-3">Reservation Confirmed!</h2>
+        <p class="lead mb-4">Thank you for your reservation. Your ticket is now active.</p>
 
         <hr />
 
-        <p>
+        <p class="mb-4">
             You can view your tickets anytime in
-            <a asp-controller="Profile" asp-action="Index" class="fw-bold">your profile</a>.
+            <a asp-controller="Profile" asp-action="Index" class="fw-bold text-decoration-none text-info">your profile</a>.
         </p>
 
-        <div class="mt-4">
-            <a asp-controller="Projections" asp-action="Index" class="btn btn-primary me-2">
+        <div>
+            <a asp-controller="Projections" asp-action="Index" class="btn btn-primary btn-lg me-2">
                 Back to Projections
             </a>
         </div>

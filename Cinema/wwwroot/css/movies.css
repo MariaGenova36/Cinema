@@ -1,0 +1,74 @@
+﻿body {
+    background: url('/images/pngtree-light-effect-particles-moving-starry-sky-background-picture-image_1439238.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.overlay {
+    background: rgba(30, 30, 30, 0.9);
+    padding: 40px 0;
+    color: #fff;
+}
+
+.cinema-title {
+    font-size: 3rem;
+    color: #e8b958;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.movie-card {
+    background: rgba(20, 20, 20, 0.85);
+    border-radius: 12px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+    .movie-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+    }
+
+    .movie-card img {
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        object-fit: contain; /* Важното - показва цялото изображение */
+        width: 100%; /* Застопорява ширината на картата */
+        height: 300px; /* Височина на плаката, може да се регулира */
+        background: #111; /* Черен фон за празни места около изображението */
+        padding: 10px; /* Малко padding за визуален ефект */
+    }
+
+    .movie-card .btn {
+        margin-top: 5px;
+    }
+
+.navbar {
+    background-color: #0B0C1D !important;
+}
+
+.btn.btn-primary.w-100 {
+    background-color: #d6a94d;
+    color: #111;
+    border-color: #cfa843;
+}
+
+    .btn.btn-primary.w-100:hover {
+        background-color: #e0b64c;
+        color: #111;
+    }
+
+.card-title {
+    color: #d6a94d; 
+    font-weight: 600; 
+}

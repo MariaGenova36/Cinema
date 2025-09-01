@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using QuestPDF.Infrastructure;
 
 namespace Cinema
 {
@@ -12,6 +13,8 @@ namespace Cinema
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            QuestPDF.Settings.License = LicenseType.Community;
 
             builder.Services.AddTransient<IEmailSender, EmailSender>();
 
@@ -70,7 +73,7 @@ namespace Cinema
 
             async Task SeedRolesAsync(RoleManager<IdentityRole> roleManager)
             {
-                string[] roleNames = { "Admin", "User" };
+                string[] roleNames = { "Admin", "User", "Staff" };
 
                 foreach (var roleName in roleNames)
                 {

@@ -1,0 +1,82 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    background: url('/images/pngtree-light-effect-particles-moving-starry-sky-background-picture-image_1439238.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+.overlay {
+    background: rgba(30,30,30,0.9); /* overlay за четливост */
+    color: #fff;
+    padding: 40px 0;
+    box-shadow: 0 0 12px rgba(214, 169, 77, 0.3);
+}
+
+.cinema-title {
+    background: linear-gradient(90deg, #d6a94d, #e8b958, #f5d38c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 4px #d6a94d, 0 0 8px #e8b958;
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.btn-sm {
+    font-size: 0.85rem;
+}
+
+
+/* Gold text */
+.text-gold {
+    color: antiquewhite !important;
+}
+
+/* Projection Table */
+.projection-table {
+    background-color: rgba(47, 47, 47, 0.85);
+    border-radius: 12px;
+}
+
+    .projection-table th, .projection-table td {
+        vertical-align: middle;
+    }
+
+    .projection-table > tbody > tr:nth-of-type(odd) {
+        background-color: rgba(255,255,255,0.05);
+    }
+
+/* Projection row hover effect */
+.projection-row {
+    border-left: 4px solid #d6a94d;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 8px;
+    margin-bottom: 6px;
+}
+
+    .projection-row:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(255,215,0,0.5);
+    }
+
+/*button outline gold */
+.btn-buy {
+    border: 1px solid #e3ae42;
+    color: #e3ae42;
+}
+
+    .btn-buy:hover {
+        background-color: #d6a94d;
+        color: #000;
+    }

@@ -1,0 +1,44 @@
+.seat-btn.seat-selected {
+    background-color: #0d6efd;
+    color: white;
+    border: 2px solid #0d6efd;
+    border-radius: 50%;
+    width: 40px; /* фиксирана ширина */
+    height: 40px; /* фиксирана височина */
+    display: flex; /* flex контейнер */
+    align-items: center; /* вертикално центриране */
+    justify-content: center; /* хоризонтално центриране */
+    font-size: 14px;
+    margin: 2px;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.card {
+    background: #2f2f2f;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+h2, h4, h5, p {
+    color: #f1f1f1;
+}
+
+button.btn-success {
+    background: linear-gradient(to right, #0d6efd, #0b5ed7);
+    border: none;
+}
+
+    button.btn-success:hover {
+        background: linear-gradient(to right, #0b5ed7, #0a58ca);
+    }
+
+a.btn-secondary {
+    background: #6c757d;
+    color: #fff;
+}
+
+    a.btn-secondary:hover {
+        background: #5c636a;
+        color: #fff;
+    }

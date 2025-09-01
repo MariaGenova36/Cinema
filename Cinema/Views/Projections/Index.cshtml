@@ -5,71 +5,82 @@
     var ticketsCount = ViewData["TicketsCount"] as Dictionary<int, int>;
 }
 
-<h1>Projections</h1>
+<link rel="stylesheet" href="~/css/projections.css" />
 
-<p>
-    @if (ViewBag.IsAdminView == true)
-    {
-        <a asp-action="Create" class="btn btn-primary">Create New Projection</a>
-    }
-</p>
+<div class="overlay py-5">
+    <div class="container fade-in">
+        <h1 class="cinema-title mb-5 text-center">Projections</h1>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Movie</th>
-            <th>Hall</th>
-            <th>Projection Time</th>
-            <th>Ticket Price</th>
-            <th>Available Seats</th>
-            <th>Taken Seats</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            var takenSeats = ticketsCount != null && ticketsCount.ContainsKey(item.Id) ? ticketsCount[item.Id] : 0;
-            var totalSeats = item.Hall.Rows * item.Hall.Columns;
-            var availableSeats = totalSeats - takenSeats;
+        <p class="text-center mb-4">
+            @if (ViewBag.IsAdminView == true)
+            {
+                <a asp-action="Create" class="btn btn-primary">Create New Projection</a>
+            }
+        </p>
 
-            <tr>
-                <td>@item.Movie?.Title</td>
-                <td>@item.Hall?.Name</td>
-                <td>@item.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</td>
-                <td>
-                    @{
+        <div class="table-responsive">
+            <table class="table table-dark table-striped align-middle projection-table">
+                <thead>
+                    <tr class="text-gold">
+                        <th>Movie</th>
+                        <th>Hall</th>
+                        <th>Time</th>
+                        <th>Ticket Price</th>
+                        <th>Available Seats</th>
+                        <th>Taken Seats</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var takenSeats = ticketsCount != null && ticketsCount.ContainsKey(item.Id) ? ticketsCount[item.Id] : 0;
+                        var totalSeats = item.Hall.Rows * item.Hall.Columns;
+                        var availableSeats = totalSeats - takenSeats;
                         var basePrice = item.TicketPrice;
                         var ticketTypes = new List<(string Name, decimal Multiplier)>
+                                        {
+                                        ("Regular", 1.0m),
+                                        ("Kid", 0.5m),
+                                        ("Student", 0.75m)
+                                        };
+                        <tr class="projection-row">
+                            <td>@item.Movie?.Title</td>
+                            <td>@item.Hall?.Name</td>
+                            <td>@item.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>
+                                @foreach (var type in ticketTypes)
                                 {
-                                ("Regular", 1.0m),
-                                ("Kid", 0.5m),
-                                ("Student", 0.75m)
-                                };
+                                    var finalPrice = basePrice * type.Multiplier;
+                                    <div>@type.Name: @finalPrice.ToString("C")</div>
+                                }
+                            </td>
+                            <td>@availableSeats</td>
+                            <td>@takenSeats</td>
+                            <td>
+                                @if (ViewBag.IsAdminView == null || ViewBag.IsAdminView == false)
+                                {
+                                    <a asp-controller="Tickets" asp-action="Create" asp-route-projectionId="@item.Id" class="btn btn-buy btn-sm me-1 mb-1">
+                                        <i class="bi bi-cart-plus"></i> Buy
+                                    </a>
+                                }
+                                @if (ViewBag.IsAdminView == true)
+                                {
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm mb-1">
+                                        <i class="bi bi-info-circle"></i> Details
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm me-1 mb-1">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm me-1 mb-1">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </a>
+                                }
+                            </td>
+                        </tr>
                     }
-                    @foreach (var type in ticketTypes)
-                    {
-                        var finalPrice = basePrice * type.Multiplier;
-                        <div>@type.Name: @finalPrice.ToString("C")</div>
-                    }
-                </td>
-                <td>@availableSeats</td>
-                <td>@takenSeats</td>
-                <td>
-                    @if (ViewBag.IsAdminView == null || ViewBag.IsAdminView == false)
-                    {
-                        <a asp-controller="Tickets" asp-action="Create" asp-route-projectionId="@item.Id" class="btn btn-success btn-sm">
-                            Buy Ticket
-                        </a>
-                    }
-                    @if (ViewBag.IsAdminView == true)
-                    {
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit |</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id"> Delete |</a>
-                    }
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

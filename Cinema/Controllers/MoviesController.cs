@@ -26,11 +26,7 @@ namespace Cinema.Controllers
 
             ViewData["CurrentFilter"] = search;
             ViewData["CurrentGenre"] = genreId;
-            ViewData["CurrentSort"] = sortOrder;
 
-            ViewData["TitleSort"] = String.IsNullOrEmpty(sortOrder) ? "title_desc" : "";
-            ViewData["ReleaseSort"] = sortOrder == "release_asc" ? "release_desc" : "release_asc";
-            ViewData["DurationSort"] = sortOrder == "duration_asc" ? "duration_desc" : "duration_asc";
 
             var movies = _context.Movies.Include(m => m.Genre).AsQueryable();
 
@@ -44,27 +40,6 @@ namespace Cinema.Controllers
                 movies = movies.Where(m => m.GenreId == genreId);
             }
 
-            switch (sortOrder)
-            {
-                case "title_desc":
-                    movies = movies.OrderByDescending(m => m.Title);
-                    break;
-                case "release_asc":
-                    movies = movies.OrderBy(m => m.ReleaseDate);
-                    break;
-                case "release_desc":
-                    movies = movies.OrderByDescending(m => m.ReleaseDate);
-                    break;
-                case "duration_asc":
-                    movies = movies.OrderBy(m => m.Duration);
-                    break;
-                case "duration_desc":
-                    movies = movies.OrderByDescending(m => m.Duration);
-                    break;
-                default:
-                    movies = movies.OrderBy(m => m.Title);
-                    break;
-            }
 
             ViewBag.Genres = new SelectList(await _context.Genres.ToListAsync(), "Id", "Name");
 

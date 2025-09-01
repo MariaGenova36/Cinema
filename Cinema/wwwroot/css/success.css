@@ -1,0 +1,58 @@
+body {
+    background: linear-gradient(to bottom, #0d0d0d, #1a1a1a, #262626);
+    color: #f1f1f1;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Контейнер за Success */
+.success-container {
+    padding: 20px;
+}
+
+/* Карта */
+.success-card {
+    max-width: 600px;
+    border-radius: 15px;
+    background-color: #2f2f2f;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Fade-in + slide-up анимация */
+@@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Заглавия и текст */
+h2, p {
+    color: #f1f1f1;
+}
+
+/* Бутон Primary */
+.btn-primary {
+    background: linear-gradient(to right, #0d6efd, #0b5ed7);
+    border: none;
+    transition: all 0.2s ease-in-out;
+}
+
+    .btn-primary:hover {
+        background: linear-gradient(to right, #0b5ed7, #0a58ca);
+        transform: scale(1.05);
+    }
+
+/* Линк към профила */
+a.text-info {
+    color: #0dcaf0;
+}
+
+    a.text-info:hover {
+        text-decoration: underline;
+    }

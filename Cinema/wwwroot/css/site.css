@@ -1,93 +1,200 @@
+/* =============================
+   Базови стилове
+============================= */
 html {
-  font-size: 14px;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
-}
-
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
-}
-
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
-}
-
-
-
-
-.screen-indicator {
-    width: 600px;
-    margin: 0 auto;
-    font-weight: bold;
-    font-size: 18px;
-    letter-spacing: 2px;
-    background-color: #6c757d;
-    color: white;
-    padding: 8px;
-    border-radius: 8px;
-    user-select: none;
-    text-align: center;
-}
-
-.seat-grid-wrapper {
+    margin: 0; /* махаме margin-bottom, ще използваме flex */
     display: flex;
     flex-direction: column;
-    gap: 4px; 
-    justify-content: center;
-    align-items: center;
+    min-height: 100vh;
 }
 
-
-.seat-row {
-    display: flex;
-    gap: 4px; 
+/* =============================
+   Main content за разтягане
+============================= */
+.main-content {
+    flex: 1; /* разтяга съдържанието между navbar и footer */
 }
 
-.seat-btn {
-    width: 50px;
-    height: 40px;
-    text-align: center;
-    padding: 0;
-    font-size: 12px;
-    box-sizing: border-box;
+/* =============================
+   Фокус ефекти
+============================= */
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+/* =============================
+   Form-floating placeholders
+============================= */
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+/* =============================
+   Navbar стилове
+============================= */
+.navbar {
+    background-color: #0B0C1D !important;
+    border-bottom: 1px solid #2a2a3d;
+    position: relative;
+    z-index: 10;
+}
+
+nav.navbar .nav-link,
+nav.navbar .navbar-brand,
+nav.navbar .btn,
+nav.navbar i.bi {
+    color: #F5D38C !important;
     background-color: transparent;
-    border: 1px solid #198754;
-    color: #198754;
-    transition: background-color 0.2s, color 0.2s;
-    cursor: pointer;
+    border-color: transparent;
+    font-weight: 500;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
 }
 
-    .seat-btn.seat-selected {
-        background-color: #198754; /* зелен фон */
-        color: white; /* бял текст */
-        border-color: #198754;
+    nav.navbar .nav-link:hover,
+    nav.navbar .btn:hover,
+    nav.navbar i.bi:hover {
+        color: #FFE9A0 !important;
     }
 
-    .seat-btn:disabled {
-        background-color: #dc3545; /* червен фон за заетите места */
-        color: white;
-        border-color: #dc3545;
-        pointer-events: none;
+    nav.navbar .nav-link.active {
+        color: #8B1E3F !important;
+        border-bottom: 2px solid #8B1E3F;
+        font-weight: 600;
     }
 
+/* Navbar текст и бутони */
+.navbar-nav .nav-link {
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+.navbar-nav .btn {
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 10px 20px;
+}
+
+/* =============================
+   Дясна секция: Admin/Login/Register/Logout
+============================= */
+.navbar-nav.ms-auto,
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 10px;
+    border-left: 1px solid rgba(245, 211, 140, 0.5);
+    background-color: rgba(11, 12, 29, 0.6);
+    border-radius: 12px;
+    margin-left: 15px;
+}
+
+    .user-actions .btn-action {
+        color: #F5D38C;
+        background-color: transparent;
+        border-radius: 20px;
+        padding: 6px 14px;
+        border: 1px solid #F5D38C;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.3s ease-in-out;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+        .user-actions .btn-action:hover {
+            background-color: #F5D38C;
+            color: #0B0C1D;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+        }
+
+    .user-actions .btn-register,
+    .user-actions .btn-logout {
+        border-color: #8B1E3F;
+        color: #fff;
+        background-color: #8B1E3F;
+    }
+
+        .user-actions .btn-register:hover,
+        .user-actions .btn-logout:hover {
+            background-color: #a2284a;
+        }
+
+    .user-actions .btn-action + .btn-action {
+        border-left: 1px solid rgba(245, 211, 140, 0.5);
+        padding-left: 12px;
+    }
+
+/* =============================
+   Глобални линкове извън navbar
+============================= */
+body a:not(.nav-link):not(.navbar-brand):not(.btn) {
+    color: #0077cc;
+}
+
+/* =============================
+   Footer
+============================= */
+.footer {
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+    background-color: #0B0C1D;
+    color: #F5D38C;
+    text-align: center;
+    z-index: 1000;
+}
+
+/* =============================
+   Bootstrap overrides
+============================= */
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
 
 /* Admin Sidebar Styles */
 #adminSidebar {

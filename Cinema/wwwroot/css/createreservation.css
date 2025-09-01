@@ -1,0 +1,155 @@
+﻿body {
+    background: linear-gradient(to bottom, #0d0d0d, #1a1a1a, #262626);
+    color: #F5D38C;
+}
+
+/* Екран */
+.screen-indicator {
+    width: 80%;
+    margin: 0 auto 20px auto;
+    font-weight: bold;
+    font-size: 20px;
+    letter-spacing: 3px;
+    background: linear-gradient(to right, #6c757d, #343a40);
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Контейнер за салона */
+.seat-grid-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    background: #2f2f2f;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+}
+
+/* Ред с места */
+.seat-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+/* Бутон за място */
+.seat-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 12px;
+    border: 2px solid #28a745;
+    background: transparent;
+    color: #28a745;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+    .seat-btn:hover {
+        transform: scale(1.1);
+        background-color: rgba(40,167,69,0.2);
+    }
+
+    /* Избрано място */
+    .seat-btn.seat-selected {
+        background-color: #0d6efd;
+        color: white;
+        border-color: #0d6efd;
+    }
+
+    /* Заето място */
+    .seat-btn:disabled {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: white;
+        pointer-events: none;
+    }
+
+/* Легенда */
+.legend {
+    margin-top: 15px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.legend-box {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+}
+
+/* Анимация за fade-in + slide-up */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Анимация за екрана */
+.screen-indicator {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* Анимация за grid контейнера */
+.seat-grid-wrapper {
+    animation: fadeInUp 1s ease-out;
+}
+
+/* Анимация за бутоните (леко закъснение за по-кино ефект) */
+.seat-btn {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.btn-reserve {
+    background-color: #e3ae42;
+    border: 2px solid #e3ae42;
+    color: #0B0C1D;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
+}
+
+    .btn-reserve:hover {
+        background-color: #c9972d; /* по-тъмен златист при hover */
+        border-color: #c9972d;
+        color: #fff; /* текстът става бял при hover */
+    }
+
+
+
+.mt-4 {
+    margin-bottom: 20px; /* разстояние до footer-а */
+}
+
+.container {
+    color: #e3ae42;
+}
+
+.price-box {
+    border: 2px solid #e3ae42;
+}
+
+    .price-box strong {
+        color: #e3ae42; 
+    }

@@ -1,75 +1,229 @@
 ﻿@model ProfileViewModel
 
-@if (User.IsInRole("Admin"))
-{
-    <a class="btn btn-secondary mb-3" href="/Admin/Reservations">Go to Admin Panel</a>
-}
+<h2 class="mb-4 text-center text-gold">Your Profile</h2>
 
-<h2>Your Profile</h2>
-
-<form method="post" asp-action="Index">
-    <div class="mb-3">
-        <label asp-for="Email" class="form-label"></label>
-        <input asp-for="Email" class="form-control" readonly />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="FullName" class="form-label"></label>
-        <input asp-for="FullName" class="form-control" />
-        <span asp-validation-for="FullName" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Save</button>
-
-    @if (ViewData["Message"] != null)
-    {
-        <div class="alert alert-success mt-3">
-            @ViewData["Message"]
+<!-- User Info Card -->
+<div class="card shadow-lg p-4 mb-5 bg-dark text-white rounded-3 fade-up">
+    <form method="post" asp-action="Index">
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label text-gold"></label>
+            <input asp-for="Email" class="form-control bg-secondary text-white" readonly />
         </div>
-    }
-</form>
 
-<hr />
+        <div class="mb-3">
+            <label asp-for="FullName" class="form-label text-gold"></label>
+            <input asp-for="FullName" class="form-control bg-secondary text-white" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
 
-<h3>Your Tickets</h3>
+        <button type="submit" class="btn btn-gold btn-lg">Save</button>
+
+        @if (ViewData["Message"] != null)
+        {
+            <div class="alert alert-success mt-3">
+                @ViewData["Message"]
+            </div>
+        }
+    </form>
+</div>
+
+<hr class="border-gold" />
+
+<!-- Tickets Table Card -->
+<h3 class="mb-3 text-center text-gold">Your Tickets</h3>
 
 @if (ViewBag.Tickets != null && ((List<Cinema.Models.Ticket>)ViewBag.Tickets).Count > 0)
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Movie</th>
-                <th>Projection Date</th>
-                <th>Seat Number</th>
-                <th>Purchase Time</th>
-                <th>Ticket Type</th>
-                <th>Price</th>
-                <th>Paid</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var ticket in (List<Cinema.Models.Ticket>)ViewBag.Tickets)
-            {
-                <tr>
-                    <td>@ticket.Projection.Movie.Title</td>
-                    <td>@ticket.Projection.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>Row: @ticket.SeatRow, Seat: @ticket.SeatColumn</td>
-                    <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@ticket.TicketType</td>
-                    <td>@ticket.Price.ToString("C")</td>
-                    <td>@(ticket.IsPaid ? "Yes" : "No")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="card shadow-lg p-4 mb-5 bg-dark text-white rounded-3 fade-up ticket-card">
+        <div class="table-responsive">
+            <table class="table table-dark align-middle ticket-table">
+                <thead>
+                    <tr class="text-gold">
+                        <th>Movie</th>
+                        <th>Projection Date</th>
+                        <th>Seat Number</th>
+                        <th>Purchase Time</th>
+                        <th>Ticket Type</th>
+                        <th>Price</th>
+                        <th>Paid</th>
+                        <th>Used</th>
+                        <th>QR Code</th>
+                        <th>Ticket ID</th>
+                        <th>PDF</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ticket in (List<Cinema.Models.Ticket>)ViewBag.Tickets)
+                    {
+                        <tr class="ticket-row">
+                            <td>@ticket.Projection.Movie.Title</td>
+                            <td>@ticket.Projection.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>Row: @ticket.SeatRow, Seat: @ticket.SeatColumn</td>
+                            <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@ticket.TicketType</td>
+                            <td class="text-gold">@ticket.Price.ToString("C")</td>
+                            <td>@(ticket.IsPaid ? "Yes" : "No")</td>
+                            <td>
+                                @if (ticket.IsUsed)
+                                {
+                                    <span class="badge bg-secondary">Used</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-gold">Valid</span>
+                                }
+                            </td>
+                            <td class="qr-cell">
+                                <img src="@Url.Action("QRCode", "Tickets", new { id = ticket.Id })" width="80" height="80" />
+                            </td>
+                            <td>@ticket.Id</td>
+                            <td>
+                                <a asp-controller="Tickets" asp-action="DownloadTicketPdf" asp-route-id="@ticket.Id"
+                                   class="btn btn-sm btn-outline-gold" title="Download PDF">
+                                    <i class="bi bi-file-earmark-pdf"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 }
 else
 {
-    <p>You have no tickets.</p>
+    <p class="text-center text-gold">You have no tickets.</p>
 }
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+        }
 }
+
+<style>
+    body {
+        background-image: url('/images/pngtree-light-effect-particles-moving-starry-sky-background-picture-image_1439238.jpg');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: #f1f1f1;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Gold color */
+    .text-gold {
+        color: antiquewhite !important;
+    }
+
+    /* Cards */
+    .card {
+        border-radius: 15px;
+        background: rgba(47, 47, 47, 0.85); /* полупрозрачен за фон */
+        box-shadow: 0 6px 25px rgba(0,0,0,0.7);
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    /* Form inputs */
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #444;
+        background-color: #2f2f2f;
+        color: #fff;
+    }
+
+        .form-control:focus {
+            border-color: #FFD700;
+            box-shadow: 0 0 8px rgba(255,215,0,0.6);
+        }
+
+    /* Buttons */
+    .btn-gold {
+        background: linear-gradient(to right, #FFD700, #FFC700);
+        border: none;
+        color: #000;
+        font-weight: bold;
+    }
+
+        .btn-gold:hover {
+            background: linear-gradient(to right, #FFC700, #FFB700);
+            transform: scale(1.05);
+        }
+
+    /* Tickets Table */
+    .table-dark {
+        background-color: rgba(47, 47, 47, 0.85);
+        border-radius: 12px;
+    }
+
+    .ticket-table th, .ticket-table td {
+        vertical-align: middle;
+    }
+
+    .table-striped > tbody > tr:nth-of-type(odd) {
+        background-color: rgba(255,255,255,0.05);
+    }
+
+    /* Ticket row effect */
+    .ticket-row {
+        border-left: 4px solid #FFD700;
+        transition: transform 0.2s, box-shadow 0.2s;
+        border-radius: 8px;
+        margin-bottom: 6px;
+    }
+
+        .ticket-row:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(255,215,0,0.5);
+        }
+
+    /* QR code cell with glow */
+    .qr-cell img {
+        border: 2px solid #FFD700;
+        border-radius: 6px;
+        box-shadow: 0 0 10px rgba(255,215,0,0.7);
+    }
+
+    /* Badge colors */
+    .badge.bg-gold {
+        background-color: #FFD700 !important;
+        color: #000 !important;
+    }
+
+    .badge.bg-secondary {
+        background-color: #6c757d !important;
+    }
+
+    /* PDF button outline gold */
+    .btn-outline-gold {
+        border: 1px solid #FFD700;
+        color: #FFD700;
+    }
+
+        .btn-outline-gold:hover {
+            background-color: #FFD700;
+            color: #000;
+        }
+
+    /* Animations */
+    @@keyframes fadeInUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .fade-up {
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out forwards;
+    }
+</style>
+

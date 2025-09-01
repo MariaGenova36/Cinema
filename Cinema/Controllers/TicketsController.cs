@@ -7,10 +7,20 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using QRCoder;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
+
+
 
 namespace Cinema.Controllers
 {
@@ -270,17 +280,29 @@ namespace Cinema.Controllers
             }
 
             // Изпращане на потвърдителен имейл
-            string emailBody = $@"
-        <h3>Reservation Confirmed!</h3>
-        <p>Movie: {projection.Movie.Title}</p>
-        <p>Time: {projection.ProjectionTime:dd.MM.yyyy HH:mm}</p>
-        <p>Hall: {projection.Hall.Name}</p>
-        <p>Ticket type: {ticketType}</p>
-        <p>Seats: {string.Join(", ", rows.Select((r, i) => $"Row {r}, Seat {cols[i]}"))}</p>
-        <p>Total: {(projection.TicketPrice * multiplier * rows.Count):F2} лв.</p>
-    ";
+            var emailBody = $@"
+<p style='font-family: Arial, sans-serif; color: #000000; font-size: 14px;'>Hello, <strong>{user.FullName}</strong>!</p>
 
-            await _emailSender.SendEmailAsync(user.Email, "Cinema Reservation Confirmation", emailBody);
+<p style='font-family: Arial, sans-serif; color: #000000; font-size: 14px;'>Thank you for booking with <strong>Starluxe Cinema</strong>!</p>
+
+<p style='font-family: Arial, sans-serif; color: #000000; font-size: 14px;'>Here are your reservation details:</p>
+
+<ul style='font-family: Arial, sans-serif; color: #000000; font-size: 14px;'>
+    <li><strong>Movie:</strong> {projection.Movie.Title}</li>
+    <li><strong>Time:</strong> {projection.ProjectionTime:dd.MM.yyyy HH:mm}</li>
+    <li><strong>Hall:</strong> {projection.Hall.Name}</li>
+    <li><strong>Ticket type:</strong> {ticketType}</li>
+    <li><strong>Seats:</strong> {string.Join(", ", rows.Select((r, i) => $"Row {r}, Seat {cols[i]}"))}</li>
+    <li><strong>Total:</strong> {(projection.TicketPrice * multiplier * rows.Count):F2} лв.</li>
+</ul>
+
+<p style='font-family: Arial, sans-serif; color: #000000; font-size: 14px;'>Please keep this email for your records.</p>
+
+<p style='font-family: Arial, sans-serif; color: #000000; font-size: 14px;'>Best regards,<br>
+<strong>The Starluxe Cinema Team</strong></p>
+";
+
+            await _emailSender.SendEmailAsync(user.Email, "Starluxe Cinema Reservation Confirmation", emailBody);
 
             return RedirectToAction("Success");
         }
@@ -289,5 +311,116 @@ namespace Cinema.Controllers
         {
             return View();
         }
+
+        public IActionResult QRCode(int id)
+        {
+            var ticket = _context.Tickets.Find(id);
+            if (ticket == null) return NotFound();
+
+            using var qrGenerator = new QRCodeGenerator();
+            var qrData = qrGenerator.CreateQrCode(id.ToString(), QRCodeGenerator.ECCLevel.Q);
+            var qrCode = new PngByteQRCode(qrData);
+            byte[] qrBytes = qrCode.GetGraphic(20);
+
+            return File(qrBytes, "image/png");
+        }
+
+        public IActionResult DownloadTicketPdf(int id)
+        {
+            var ticket = _context.Tickets
+                .Include(t => t.Projection)
+                    .ThenInclude(p => p.Movie)
+                .Include(t => t.Projection)
+                    .ThenInclude(p => p.Hall)
+                .Include(t => t.User)
+                .FirstOrDefault(t => t.Id == id);
+
+            if (ticket == null)
+                return NotFound();
+
+            var qrBytes = QRCodeGeneratorBytes(ticket.Id);
+
+            var pdfBytes = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    // 72 точки на инч
+                    float width = 6f * 72;   // 6 inches
+                    float height = 3f * 72;  // 3 inches
+                    page.Size(width, height);
+                    page.Margin(10);
+
+                    // Рамка за изрязване
+                    page.Content().Padding(5).Border(0.5f).BorderColor("#808080").Row(row =>
+                    {
+                        // Лява част (информация)
+                        row.RelativeItem().Padding(5).Column(col =>
+                        {
+                            col.Spacing(8);
+                            col.Item().Text("CINEMA TICKET").FontSize(14).Bold().AlignCenter();
+                            col.Item().LineHorizontal(1).LineColor(Colors.Black);
+                            col.Item().Text($"Movie: {ticket.Projection.Movie.Title}").FontSize(11).Bold();
+                            col.Item().Text($"Date & Time: {ticket.Projection.ProjectionTime:dd.MM.yyyy HH:mm}").FontSize(10);
+                            col.Item().Text($"Hall: {ticket.Projection.Hall.Name}").FontSize(10);
+                            col.Item().Text($"Seat: Row {ticket.SeatRow}, Seat {ticket.SeatColumn}").FontSize(10);
+                            col.Item().LineHorizontal(0.5f).LineColor(Colors.Black);
+                            col.Item().Text($"Ticket Type: {ticket.TicketType}").FontSize(9).Italic();
+                            col.Item().Text($"Price: {ticket.Price:C}").FontSize(10).Bold();
+                            col.Item().Text($"Customer: {ticket.User?.FullName ?? "N/A"}").FontSize(9);
+                        });
+
+                        // Дясна част (QR код)
+                        row.ConstantItem(120).Padding(6).BorderLeft(0.5f).BorderColor("#808080").AlignMiddle().Column(qrCol =>
+                        {
+                            qrCol.Spacing(6);
+
+                            // Горна перфорация
+                            qrCol.Item().AlignCenter().Row(r =>
+                            {
+                                for (int i = 0; i < 15; i++)
+                                {
+                                    r.ConstantItem(4).Height(4).Background(Colors.Black);
+                                    r.ConstantItem(2);
+                                }
+                            });
+
+                            qrCol.Item().Text("SCAN HERE").AlignCenter().FontSize(10).Bold();
+
+                            qrCol.Item().Height(100).AlignCenter().AlignMiddle().Element(qrContainer =>
+                            {
+                                qrContainer.Image(new MemoryStream(qrBytes), ImageScaling.FitArea);
+                            });
+
+                            // Долна перфорация
+                            qrCol.Item().AlignCenter().Row(r =>
+                            {
+                                for (int i = 0; i < 15; i++)
+                                {
+                                    r.ConstantItem(4).Height(4).Background(Colors.Black);
+                                    r.ConstantItem(2);
+                                }
+                            });
+
+                            // Ticket ID под QR кода
+                            qrCol.Item().PaddingTop(4).Text($"Ticket ID: {ticket.Id}")
+                                .AlignCenter().FontSize(9).Italic();
+                        });
+                    });
+                });
+            }).GeneratePdf();
+
+            return File(pdfBytes, "application/pdf", $"Ticket_{ticket.Id}.pdf");
+        }
+
+
+        // Вземане на байтовете на QR кода чрез съществуващия метод
+        private byte[] QRCodeGeneratorBytes(int id)
+        {
+            using var qrGenerator = new QRCoder.QRCodeGenerator();
+            var qrData = qrGenerator.CreateQrCode(id.ToString(), QRCoder.QRCodeGenerator.ECCLevel.Q);
+            var qrCode = new QRCoder.PngByteQRCode(qrData);
+            return qrCode.GetGraphic(20);
+        }
+
     }
 }
