@@ -5,52 +5,160 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Create Movie</h1>
+<style>
+    /* --- Page Background --- */
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Segoe UI', sans-serif !important;
+        background: url('/images/pngtree-light-effect-particles-moving-starry-sky-background-picture-image_1439238.jpg') no-repeat center center fixed !important;
+        background-size: cover !important;
+        color: #fff !important;
+    }
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
+    /* --- Container --- */
+    .page-container {
+        background: rgba(30, 30, 30, 0.9) !important;
+        padding: 30px !important;
+        border-radius: 12px !important;
+        margin: 20px auto !important;
+        max-width: 700px !important;
+        box-shadow: 0 0 20px rgba(214, 169, 77, 0.3) !important;
+    }
+
+    /* --- Headings --- */
+    h1 {
+        font-size: 2rem !important;
+        background: linear-gradient(90deg, #d6a94d, #e8b958, #f5d38c) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        color: transparent !important;
+        -webkit-text-fill-color: transparent !important;
+        text-shadow: 0 0 6px #d6a94d, 0 0 12px #e8b958 !important;
+        margin-bottom: 20px !important;
+        text-align: center !important;
+    }
+
+    /* --- Form Elements --- */
+    .form-group {
+        margin-bottom: 15px !important;
+    }
+
+    label {
+        color: #d6a94d !important;
+        font-weight: bold !important;
+    }
+
+    input, select {
+        width: 100% !important;
+        padding: 10px !important;
+        border: 1px solid #d6a94d !important;
+        border-radius: 8px !important;
+        background-color: #1e1e1e !important;
+        color: #fff !important;
+    }
+
+        input:focus, select:focus {
+            outline: none !important;
+            border-color: #e8b958 !important;
+            box-shadow: 0 0 8px rgba(214, 169, 77, 0.5) !important;
+        }
+
+    /* --- Validation --- */
+    .text-danger {
+        color: #ff4d4d !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* --- Buttons --- */
+    Button.btn-create {
+        display: inline-block !important;
+        width: auto !important;
+        padding: 10px 20px !important;
+        border-radius: 8px;
+        border: 1px solid #e3ae42 !important;
+        background-color: #d6a94d !important;
+        color: #000 !important;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s !important;
+        text-decoration: none !important;
+        text-align: center !important;
+    }
+
+        button.btn-create:hover {
+            background-color: #e8b958;
+        }
+
+    .btn-back {
+        display: inline-block !important;
+        padding: 10px 20px !important;
+        border-radius: 8px !important;
+        border: 1px solid #d6a94d !important;
+        background-color: transparent !important;
+        color: #d6a94d !important;
+        font-weight: bold !important;
+        text-decoration: none !important;
+        transition: 0.3s !important;
+        margin-top: 15px !important;
+    }
+
+        .btn-back:hover {
+            background-color: #d6a94d !important;
+            color: #000 !important;
+        }
+</style>
+
+<div class="page-container fade-in">
+    <h1>Create Movie</h1>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            <input asp-for="Description" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="GenreId">Genre</label>
+            <select asp-for="GenreId" asp-items="ViewBag.GenreId"></select>
+            <span asp-validation-for="GenreId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Duration"></label>
+            <input asp-for="Duration" type="time" step="60" />
+            <span asp-validation-for="Duration" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ReleaseDate"></label>
+            <input asp-for="ReleaseDate" type="date" />
+            <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PosterFile"></label>
+            <input asp-for="PosterFile" type="file" />
+            <span asp-validation-for="PosterFile" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-create">Create</button>
+    </form>
+
+    <div>
+        <a asp-action="Index" class="btn-back">Back to List</a>
     </div>
-
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="GenreId">Genre</label>
-        <select asp-for="GenreId" class="form-control" asp-items="ViewBag.GenreId"></select>
-        <span asp-validation-for="GenreId" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Duration"></label>
-        <input asp-for="Duration" class="form-control" type="time" step="60" />
-        <span asp-validation-for="Duration" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ReleaseDate"></label>
-        <input asp-for="ReleaseDate" type="date" class="form-control" />
-        <span asp-validation-for="ReleaseDate" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="PosterFile"></label>
-        <input asp-for="PosterFile" type="file" class="form-control" />
-        <span asp-validation-for="PosterFile" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success">Create</button>
-</form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

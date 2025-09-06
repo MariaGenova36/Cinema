@@ -5,31 +5,118 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Delete Projection</h1>
+<style>
+    /* --- Page Background --- */
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Segoe UI', sans-serif !important;
+        background: url('/images/pngtree-light-effect-particles-moving-starry-sky-background-picture-image_1439238.jpg') no-repeat center center fixed !important;
+        background-size: cover !important;
+        color: #fff !important;
+    }
 
-<h3>Are you sure you want to delete this?</h3>
+    /* --- Container --- */
+    .page-container {
+        background: rgba(30, 30, 30, 0.9) !important;
+        padding: 30px !important;
+        border-radius: 12px !important;
+        margin: 30px auto !important;
+        max-width: 700px !important;
+        box-shadow: 0 0 20px rgba(214, 169, 77, 0.3) !important;
+    }
 
-<div>
-    <h4>Projection</h4>
+    /* --- Headings --- */
+    h1 {
+        font-size: 2rem !important;
+        text-align: center !important;
+        background: linear-gradient(90deg, #d6a94d, #e8b958, #f5d38c) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        color: transparent !important;
+        -webkit-text-fill-color: transparent !important;
+        text-shadow: 0 0 6px #d6a94d, 0 0 12px #e8b958 !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* --- Definition List --- */
+    dl.row dt {
+        color: #d6a94d !important;
+        font-weight: bold !important;
+    }
+
+    dl.row dd {
+        color: #fff !important;
+    }
+
+    /* --- Buttons --- */
+    .btn-danger, .btn-secondary {
+        display: inline-block !important;
+        width: auto !important;
+        padding: 10px 20px !important;
+        border-radius: 8px !important;
+        font-weight: bold !important;
+        cursor: pointer !important;
+        text-align: center !important;
+        text-decoration: none !important;
+        transition: 0.3s !important;
+        margin-top: 10px !important;
+    }
+
+    .btn-action {
+        display: inline-block !important;
+        width: auto !important;
+        padding: 10px 20px !important;
+        border-radius: 8px !important;
+        border: 1px solid #e3ae42 !important;
+        background-color: #d6a94d !important;
+        color: #000 !important;
+        font-weight: bold !important;
+        cursor: pointer !important;
+        text-align: center !important;
+        text-decoration: none !important;
+        transition: 0.3s !important;
+    }
+
+        .btn-action:hover {
+            background-color: #e8b958 !important;
+        }
+
+    .btn-secondary {
+        background-color: transparent !important;
+        border: 1px solid #d6a94d !important;
+        color: #d6a94d !important;
+    }
+
+        .btn-secondary:hover {
+            background-color: #d6a94d !important;
+            color: #000 !important;
+        }
+</style>
+
+<div class="page-container fade-in">
+    <h1>Delete Projection</h1>
+
+    <h4>Projection Details</h4>
     <hr />
+
     <dl class="row">
-        <dt class="col-sm-2">Movie</dt>
-        <dd class="col-sm-10">@Model.Movie?.Title</dd>
+        <dt class="col-sm-3">Movie</dt>
+        <dd class="col-sm-9">@Model.Movie?.Title</dd>
 
-        <dt class="col-sm-2">Hall</dt>
-        <dd class="col-sm-10">@Model.Hall?.Name</dd>
+        <dt class="col-sm-3">Hall</dt>
+        <dd class="col-sm-9">@Model.Hall?.Name</dd>
 
-        <dt class="col-sm-2">Projection Time</dt>
-        <dd class="col-sm-10">@Model.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</dd>
+        <dt class="col-sm-3">Projection Time</dt>
+        <dd class="col-sm-9">@Model.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</dd>
 
-        <dt class="col-sm-2">Ticket Price</dt>
-        <dd class="col-sm-10">@Model.TicketPrice.ToString("C")</dd>
-
+        <dt class="col-sm-3">Ticket Price</dt>
+        <dd class="col-sm-9">@Model.TicketPrice.ToString("C")</dd>
     </dl>
 
     <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="Id" />
-        <button type="submit" class="btn btn-danger">Delete</button> |
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <button type="submit" class="btn-action">Delete</button>
+        <a asp-action="Index" class="btn-secondary">Back to List</a>
     </form>
 </div>

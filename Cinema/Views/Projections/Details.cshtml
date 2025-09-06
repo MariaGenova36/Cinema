@@ -6,11 +6,101 @@
     int takenSeats = ViewBag.TakenSeatsCount ?? 0;
     int totalSeats = ViewBag.TotalSeats ?? 0;
     int availableSeats = totalSeats - takenSeats;
+    var basePrice = Model.TicketPrice;
+    var ticketTypes = new List<(string Name, decimal Multiplier)>
+    {
+        ("Regular", 1.0m),
+        ("Kid", 0.5m),
+        ("Student", 0.75m)
+    };
 }
 
-<h1>Projection Details</h1>
+<style>
+    /* --- Page Background --- */
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Segoe UI', sans-serif !important;
+        background: url('/images/pngtree-light-effect-particles-moving-starry-sky-background-picture-image_1439238.jpg') no-repeat center center fixed !important;
+        background-size: cover !important;
+        color: #fff !important;
+    }
 
-<div class="card p-4 shadow rounded">
+    /* --- Container --- */
+    .page-container {
+        background: rgba(30, 30, 30, 0.9) !important;
+        padding: 30px !important;
+        border-radius: 12px !important;
+        margin: 30px auto !important;
+        max-width: 700px !important;
+        box-shadow: 0 0 20px rgba(214, 169, 77, 0.3) !important;
+    }
+
+    /* --- Headings --- */
+    h1 {
+        font-size: 2rem !important;
+        text-align: center !important;
+        background: linear-gradient(90deg, #d6a94d, #e8b958, #f5d38c) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        text-shadow: 0 0 6px #d6a94d, 0 0 12px #e8b958 !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* --- Details List --- */
+    dl.row dt {
+        color: #d6a94d !important;
+        font-weight: bold !important;
+    }
+
+    dl.row dd {
+        color: #fff !important;
+    }
+
+    /* --- Horizontal Rules --- */
+    hr.bg-secondary {
+        border-color: rgba(214, 169, 77, 0.3) !important;
+    }
+
+    /* --- Buttons --- */
+    .btn-edit, .btn-back {
+        display: inline-block !important;
+        width: auto !important;
+        padding: 10px 20px !important;
+        border-radius: 8px !important;
+        font-weight: bold !important;
+        cursor: pointer !important;
+        text-align: center !important;
+        text-decoration: none !important;
+        transition: 0.3s !important;
+        margin-right: 5px !important;
+    }
+
+    .btn-edit {
+        background-color: #d6a94d !important;
+        border: 1px solid #e3ae42 !important;
+        color: #000 !important;
+    }
+
+        .btn-edit:hover {
+            background-color: #e8b958 !important;
+        }
+
+    .btn-back {
+        background-color: transparent !important;
+        border: 1px solid #d6a94d !important;
+        color: #d6a94d !important;
+    }
+
+        .btn-back:hover {
+            background-color: #d6a94d !important;
+            color: #000 !important;
+        }
+</style>
+
+<div class="page-container fade-in">
+    <h1>Projection Details</h1>
+
     <dl class="row">
         <dt class="col-sm-3">Movie</dt>
         <dd class="col-sm-9">@Model.Movie?.Title</dd>
@@ -28,15 +118,29 @@
         <hr class="bg-secondary" />
 
         <dt class="col-sm-3">Ticket Price</dt>
-        <dd class="col-sm-9">@Model.TicketPrice.ToString("F2") лв.</dd>
+        <dd class="col-sm-9">
+            @foreach (var type in ticketTypes)
+            {
+                var finalPrice = basePrice * type.Multiplier;
+                <div>@type.Name: @finalPrice.ToString("F2") лв.</div>
+            }
+        </dd>
 
+        <hr class="bg-secondary" />
+
+        <dt class="col-sm-3">Seats</dt>
+        <dd class="col-sm-9">
+            Taken: @takenSeats
+            <br />
+            Available: @availableSeats
+        </dd>
     </dl>
 
     <div class="mt-4">
         @if (ViewBag.IsAdminView == true)
         {
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-edit">Edit</a>
         }
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        <a asp-action="Index" class="btn-back">Back to List</a>
     </div>
 </div>

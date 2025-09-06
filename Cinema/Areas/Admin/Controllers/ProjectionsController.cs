@@ -18,17 +18,47 @@ namespace Cinema.Areas.Admin.Controllers
             _context = context;
         }
 
-        // GET: Projections
-        public async Task<IActionResult> Index()
+        // GET: Projections/Index
+        public async Task<IActionResult> Index(string searchString, string sortOrder)
         {
-            ViewBag.IsAdminView = true; // флаг, че сме в админ панела
+            ViewBag.IsAdminView = true; // админ панел
 
-            var projections = await _context.Projections
+            var projectionsQuery = _context.Projections
                 .Include(p => p.Hall)
                 .Include(p => p.Movie)
-                .ToListAsync();
+                .AsQueryable();
 
-            // Създаваме речник за броя заети билети на всяка прожекция
+            // Филтриране по заглавие на филма
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                projectionsQuery = projectionsQuery
+                    .Where(p => p.Movie.Title.Contains(searchString));
+                ViewBag.CurrentFilter = searchString;
+            }
+
+            // Сортиране
+            projectionsQuery = sortOrder switch
+            {
+                "title_desc" => projectionsQuery.OrderByDescending(p => p.Movie.Title),
+                "title_asc" => projectionsQuery.OrderBy(p => p.Movie.Title),
+                "time_desc" => projectionsQuery.OrderByDescending(p => p.ProjectionTime),
+                "time_asc" => projectionsQuery.OrderBy(p => p.ProjectionTime),
+                _ => projectionsQuery.OrderBy(p => p.ProjectionTime),
+            };
+
+            // Опции за drop-down
+            ViewBag.SortOptions = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "time_asc", Text = "Time Ascending" },
+        new SelectListItem { Value = "time_desc", Text = "Time Descending" },
+        new SelectListItem { Value = "title_asc", Text = "Title A-Z" },
+        new SelectListItem { Value = "title_desc", Text = "Title Z-A" }
+    };
+            ViewBag.CurrentSort = sortOrder;
+
+            var projections = await projectionsQuery.ToListAsync();
+
+            // Брой заети билети
             var ticketsCount = await _context.Tickets
                 .GroupBy(t => t.ProjectionId)
                 .Select(g => new { ProjectionId = g.Key, Count = g.Count() })
@@ -36,23 +66,31 @@ namespace Cinema.Areas.Admin.Controllers
 
             ViewData["TicketsCount"] = ticketsCount;
 
-            return View(projections);
+            return View("Index", projections); // Използва същото View като нормалния потребител
         }
 
         // GET: Projections/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null) return NotFound();
-
             var projection = await _context.Projections
                 .Include(p => p.Movie)
                 .Include(p => p.Hall)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
             if (projection == null)
+            {
                 return NotFound();
+            }
 
-            ViewBag.IsAdminView = true;
+            // общ брой места
+            var totalSeats = projection.Hall.Rows * projection.Hall.Columns;
+
+            // броим вече заетите (продадени) билети
+            var takenSeats = await _context.Tickets
+                .CountAsync(t => t.ProjectionId == id);
+
+            ViewBag.TotalSeats = totalSeats;
+            ViewBag.TakenSeatsCount = takenSeats;
 
             return View(projection);
         }
@@ -80,7 +118,6 @@ namespace Cinema.Areas.Admin.Controllers
                 }
                 else
                 {
-                    // Премахваме AvailableSeats, няма нужда да го пълним
                     _context.Add(projection);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));

@@ -14,25 +14,19 @@
         <p>
             @if (ViewBag.IsAdminView == true)
             {
-                <a asp-action="Create" class="btn btn-success mb-4">Create New Movie</a>
+                <a asp-action="Create" class="btn btn-create mb-4">Create New Movie</a>
             }
         </p>
 
-        <form method="get" class="row g-2 mb-5 justify-content-center">
-            <div class="col-md-4">
-                <input type="text" name="search" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search..." />
-            </div>
-            <div class="col-md-3">
-                <select name="genreId" class="form-control" asp-items="(SelectList)ViewBag.Genres">
-                    <option value="">-- All genres --</option>
-                </select>
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Filter</button>
-            </div>
-            <div class="col-md-3">
-                <a asp-action="Index" class="btn btn-secondary w-100">Clear</a>
-            </div>
+        <form method="get" class="search-form d-flex mb-5 align-items-center gap-2 justify-content-center flex-wrap">
+            <input type="text" name="search" value="@ViewData["CurrentFilter"]" placeholder="Search..." />
+
+            <select name="genreId" asp-items="(SelectList)ViewBag.Genres">
+                <option value="">All genres</option>
+            </select>
+
+            <button type="submit" class="btn btn-action">Search / Filter</button>
+            <a asp-action="Index" class="btn btn-secondary">Clear</a>
         </form>
 
         <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -53,9 +47,9 @@
                             <div>
                                 @if (ViewBag.IsAdminView == true)
                                 {
-                                    <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-sm btn-info">Details</a>
-                                    <a asp-area="Admin" asp-controller="Movies" asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-sm btn-warning me-1">Edit</a>
-                                    <a asp-area="Admin" asp-controller="Movies" asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-sm btn-danger me-1">Delete</a>
+                                    <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-sm btn-create">Details</a>
+                                    <a asp-area="Admin" asp-controller="Movies" asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-sm btn-create me-1">Edit</a>
+                                    <a asp-area="Admin" asp-controller="Movies" asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-sm btn-create me-1">Delete</a>
                                 }
                             </div>
                         </div>
@@ -72,4 +66,3 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-

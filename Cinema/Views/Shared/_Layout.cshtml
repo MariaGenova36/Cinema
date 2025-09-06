@@ -53,14 +53,14 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="Admin" asp-controller="Admin" asp-action="Reservations">Admin Panel</a>
+                                <a class="nav-link admin-link" asp-area="Admin" asp-controller="Admin" asp-action="Reservations">Admin Panel</a>
                             </li>
                         }
 
                         @if (User.IsInRole("Staff"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Staff" asp-action="ValidateTicket">Validate Tickets</a>
+                                <a class="nav-link admin-link" asp-controller="Staff" asp-action="ValidateTicket">Validate Tickets</a>
                             </li>
                         }
 

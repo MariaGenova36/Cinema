@@ -1,35 +1,129 @@
 ﻿@model IEnumerable<Cinema.Models.Genre>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Genres";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Genres</h1>
+<style>
+    /* --- Background --- */
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Segoe UI', sans-serif !important;
+        background: url('/images/pngtree-light-effect-particles-moving-starry-sky-background-picture-image_1439238.jpg') no-repeat center center fixed !important;
+        background-size: cover !important;
+        color: #fff !important;
+    }
 
-<p>
-    <a asp-area="Admin" asp-controller="Genres" asp-action="Create" class="btn btn-primary">Create New Genre</a>
-</p>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                    <a asp-area="Admin" asp-controller="Genres" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-area="Admin" asp-controller="Genres" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    /* --- Container --- */
+    .page-container {
+        background: rgba(30, 30, 30, 0.9) !important;
+        padding: 30px !important;
+        border-radius: 12px !important;
+        margin: 30px auto !important;
+        max-width: 900px !important;
+        box-shadow: 0 0 20px rgba(214, 169, 77, 0.3) !important;
+    }
+
+    /* --- Headings --- */
+    h1 {
+        font-size: 2rem !important;
+        text-align: center !important;
+        background: linear-gradient(90deg, #d6a94d, #e8b958, #f5d38c) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        text-shadow: 0 0 6px #d6a94d, 0 0 12px #e8b958 !important;
+        margin-bottom: 20px !important;
+    }
+
+    /* --- Buttons --- */
+    .btn-create {
+        padding: 10px 20px !important;
+        border-radius: 8px;
+        border: 1px solid #e3ae42 !important;
+        background-color: #d6a94d !important;
+        color: #000 !important;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s !important;
+        text-decoration: none !important;
+        display: inline-block !important;
+    }
+
+        .btn-create:hover {
+            background-color: #e8b958 !important;
+        }
+
+    /* --- Table --- */
+    .cinema-table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        box-shadow: 0 0 12px rgba(214, 169, 77, 0.3) !important;
+    }
+
+        .cinema-table thead {
+            background: rgba(214, 169, 77, 0.2) !important;
+        }
+
+        .cinema-table th, .cinema-table td {
+            padding: 12px !important;
+            text-align: left !important;
+            color: #fff !important;
+        }
+
+        .cinema-table tbody tr:nth-of-type(odd) {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        .cinema-table tbody tr:hover {
+            background-color: rgba(214, 169, 77, 0.15) !important;
+            transition: 0.3s !important;
+        }
+
+    /* --- Action Links --- */
+    .action-link {
+        color: #d6a94d !important;
+        text-decoration: none !important;
+        font-weight: bold !important;
+        margin: 0 5px !important;
+        transition: 0.3s !important;
+    }
+
+        .action-link:hover {
+            color: #fff !important;
+            text-shadow: 0 0 6px #d6a94d !important;
+        }
+</style>
+
+<div class="page-container fade-in">
+    <h1>Genres</h1>
+
+    <p>
+        <a asp-area="Admin" asp-controller="Genres" asp-action="Create" class="btn-create">Create New Genre</a>
+    </p>
+
+    <table class="cinema-table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                    <td>
+                        <a asp-area="Admin" asp-controller="Genres" asp-action="Edit" asp-route-id="@item.Id" class="action-link">Edit</a> |
+                        <a asp-area="Admin" asp-controller="Genres" asp-action="Delete" asp-route-id="@item.Id" class="action-link">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

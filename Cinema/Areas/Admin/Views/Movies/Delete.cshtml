@@ -5,42 +5,154 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Delete</h1>
+<style>
+    /* --- Page Background --- */
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Segoe UI', sans-serif !important;
+        background: url('/images/pngtree-light-effect-particles-moving-starry-sky-background-picture-image_1439238.jpg') no-repeat center center fixed !important;
+        background-size: cover !important;
+        color: #fff !important;
+    }
 
-<h3>Are you sure you want to delete this movie?</h3>
+    /* --- Container --- */
+    .page-container {
+        background: rgba(30, 30, 30, 0.9) !important;
+        padding: 30px !important;
+        border-radius: 12px !important;
+        margin: 20px auto !important;
+        max-width: 700px !important;
+        box-shadow: 0 0 20px rgba(214, 169, 77, 0.3) !important;
+    }
 
-<div>
-    <h4>@Model.Title</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">Description</dt>
-        <dd class="col-sm-10">@Model.Description</dd>
+    /* --- Headings --- */
+    h1 {
+        font-size: 2rem !important;
+        background: linear-gradient(90deg, #d6a94d, #e8b958, #f5d38c) !important;
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        color: transparent !important;
+        -webkit-text-fill-color: transparent !important;
+        text-shadow: 0 0 6px #d6a94d, 0 0 12px #e8b958 !important;
+        margin-bottom: 15px !important;
+        text-align: center !important;
+    }
 
-        <dt class="col-sm-2">Genre</dt>
-        <dd class="col-sm-10">@Model.Genre?.Name</dd>
+    h3 {
+        text-align: center !important;
+        color: #e8b958 !important;
+        margin-bottom: 20px !important;
+    }
 
-        <dt class="col-sm-2">Duration</dt>
-        <dd class="col-sm-10">@Model.Duration.ToString(@"h\:mm") ч.</dd>
+    h4 {
+        text-align: center !important;
+        color: #fff !important;
+        margin-bottom: 15px !important;
+    }
 
-        <dt class="col-sm-2">Release Date</dt>
-        <dd class="col-sm-10">@Model.ReleaseDate.ToString("dd.MM.yyyy")</dd>
+    /* --- Definition List --- */
+    dt {
+        font-weight: bold !important;
+        color: #d6a94d !important;
+        margin-top: 10px !important;
+    }
 
-        <dt class="col-sm-2">Poster</dt>
-        <dd class="col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.PosterUrl))
-            {
-                <img src="@Model.PosterUrl" alt="Poster" style="max-height:200px;" />
-            }
-            else
-            {
-                <span>No poster available.</span>
-            }
-        </dd>
-    </dl>
+    dd {
+        margin-left: 0 !important;
+        margin-bottom: 12px !important;
+        padding-left: 5px !important;
+    }
+
+    /* --- Divider --- */
+    hr {
+        border: none !important;
+        border-top: 1px solid rgba(214, 169, 77, 0.3) !important;
+        margin: 10px 0 !important;
+    }
+
+    /* --- Poster --- */
+    .poster {
+        margin-top: 10px !important;
+        max-height: 220px !important;
+        border-radius: 8px !important;
+        border: 1px solid #d6a94d !important;
+        box-shadow: 0 0 12px rgba(214, 169, 77, 0.4) !important;
+    }
+
+    /* --- Buttons --- */
+    .btn-danger-custom {
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: 1px solid #e3ae42 !important;
+        background-color: #d6a94d !important;
+        color: #000 !important;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .btn-danger-custom:hover {
+            background-color: #e8b958;
+        }
+
+    .btn-cancel {
+        display: inline-block !important;
+        padding: 10px 18px !important;
+        border-radius: 8px !important;
+        border: 1px solid #e3ae42 !important;
+        background-color: transparent !important;
+        color: #d6a94d !important;
+        font-weight: bold !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        transition: 0.3s !important;
+    }
+
+        .btn-cancel:hover {
+            background-color: #d6a94d !important;
+            color: #000 !important;
+        }
+</style>
+
+<div class="page-container fade-in">
+    <h1>Delete</h1>
+    <h3>Are you sure you want to delete this movie?</h3>
+
+    <div>
+        <h4>@Model.Title</h4>
+        <hr />
+        <dl>
+            <dt>Description</dt>
+            <dd>@Model.Description</dd>
+
+            <dt>Genre</dt>
+            <dd>@Model.Genre?.Name</dd>
+
+            <dt>Duration</dt>
+            <dd>@Model.Duration.ToString(@"h\:mm") ч.</dd>
+
+            <dt>Release Date</dt>
+            <dd>@Model.ReleaseDate.ToString("dd.MM.yyyy")</dd>
+
+            <dt>Poster</dt>
+            <dd>
+                @if (!string.IsNullOrEmpty(Model.PosterUrl))
+                {
+                    <img src="@Model.PosterUrl" alt="Poster" class="poster" />
+                }
+                else
+                {
+                    <span>No poster available.</span>
+                }
+            </dd>
+        </dl>
+    </div>
+
+    <form asp-action="Delete" method="post" style="margin-top:20px; text-align:center;">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn-danger-custom">Delete</button>
+        <a asp-action="Index" class="btn-cancel">Cancel</a>
+    </form>
 </div>
 
-<form asp-action="Delete" method="post">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>

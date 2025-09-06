@@ -5,43 +5,147 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Edit Projection</h1>
+<style>
+    /* --- Page Background --- */
+    body {
+        margin: 0 !important;
+        padding: 0 !important;
+        font-family: 'Segoe UI', sans-serif !important;
+        background: url('/images/pngtree-light-effect-particles-moving-starry-sky-background-picture-image_1439238.jpg') no-repeat center center fixed !important;
+        background-size: cover !important;
+        color: #fff !important;
+    }
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
+    /* --- Container --- */
+    .page-container {
+        background: rgba(30, 30, 30, 0.9) !important;
+        padding: 30px !important;
+        border-radius: 12px !important;
+        margin: 30px auto !important;
+        max-width: 700px !important;
+        box-shadow: 0 0 20px rgba(214, 169, 77, 0.3) !important;
+    }
 
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    /* --- Headings --- */
+    h1 {
+        font-size: 2rem !important;
+        text-align: center !important;
+        background: linear-gradient(90deg, #d6a94d, #e8b958, #f5d38c) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+        text-shadow: 0 0 6px #d6a94d, 0 0 12px #e8b958 !important;
+        margin-bottom: 20px !important;
+    }
 
-    <div class="form-group">
-        <label asp-for="MovieId"></label>
-        <select asp-for="MovieId" class="form-control" asp-items="@(ViewData["MovieId"] as SelectList)"></select>
-        <span asp-validation-for="MovieId" class="text-danger"></span>
+    /* --- Form Elements --- */
+    .form-group {
+        margin-bottom: 15px !important;
+    }
+
+    label {
+        color: #d6a94d !important;
+        font-weight: bold !important;
+    }
+
+    input, select {
+        width: 100% !important;
+        padding: 10px !important;
+        border: 1px solid #d6a94d !important;
+        border-radius: 8px !important;
+        background-color: #1e1e1e !important;
+        color: #fff !important;
+    }
+
+        input:focus, select:focus {
+            outline: none !important;
+            border-color: #e8b958 !important;
+            box-shadow: 0 0 8px rgba(214, 169, 77, 0.5) !important;
+        }
+
+    /* --- Validation --- */
+    .text-danger {
+        color: #ff4d4d !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* --- Buttons --- */
+    .btn-save {
+        display: inline-block !important;
+        width: auto !important;
+        padding: 10px 20px !important;
+        border-radius: 8px !important;
+        border: 1px solid #e3ae42 !important;
+        background-color: #d6a94d !important;
+        color: #000 !important;
+        font-weight: bold !important;
+        cursor: pointer !important;
+        text-align: center !important;
+        text-decoration: none !important;
+        transition: 0.3s !important;
+    }
+
+        .btn-save:hover {
+            background-color: #e8b958 !important;
+        }
+
+    .btn-back {
+        display: inline-block !important;
+        padding: 10px 20px !important;
+        border-radius: 8px !important;
+        border: 1px solid #d6a94d !important;
+        background-color: transparent !important;
+        color: #d6a94d !important;
+        font-weight: bold !important;
+        text-decoration: none !important;
+        transition: 0.3s !important;
+        margin-top: 15px !important;
+    }
+
+        .btn-back:hover {
+            background-color: #d6a94d !important;
+            color: #000 !important;
+        }
+</style>
+
+<div class="page-container fade-in">
+    <h1>Edit Projection</h1>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="MovieId"></label>
+            <select asp-for="MovieId" class="form-control" asp-items="@(ViewData["MovieId"] as SelectList)"></select>
+            <span asp-validation-for="MovieId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="HallId"></label>
+            <select asp-for="HallId" class="form-control" asp-items="@(ViewData["HallId"] as SelectList)"></select>
+            <span asp-validation-for="HallId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ProjectionTime"></label>
+            <input asp-for="ProjectionTime" class="form-control" type="datetime-local"
+                   value="@Model.ProjectionTime.ToString("yyyy-MM-ddTHH:mm")" />
+            <span asp-validation-for="ProjectionTime" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TicketPrice"></label>
+            <input asp-for="TicketPrice" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="TicketPrice" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn-save">Save</button>
+    </form>
+
+    <div>
+        <a asp-action="Index" class="btn-back">Back to List</a>
     </div>
-
-    <div class="form-group">
-        <label asp-for="HallId"></label>
-        <select asp-for="HallId" class="form-control" asp-items="@(ViewData["HallId"] as SelectList)"></select>
-        <span asp-validation-for="HallId" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ProjectionTime"></label>
-        <input asp-for="ProjectionTime" class="form-control" type="datetime-local"
-               value="@Model.ProjectionTime.ToString("yyyy-MM-ddTHH:mm")" />
-        <span asp-validation-for="ProjectionTime" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="TicketPrice"></label>
-        <input asp-for="TicketPrice" class="form-control" type="number" step="0.01" />
-        <span asp-validation-for="TicketPrice" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Save</button>
-</form>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

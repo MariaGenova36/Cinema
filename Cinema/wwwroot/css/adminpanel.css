@@ -1,0 +1,49 @@
+﻿#adminSidebar {
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+#mainContent {
+    position: relative;
+    z-index: 2;
+}
+
+@media (max-width: 768px) {
+    #adminSidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 1000;
+        width: 200px;
+        background-color: #0B0C1D;
+    }
+
+        #adminSidebar.show {
+            transform: translateX(0);
+        }
+
+    #mainContent {
+        margin-left: 0;
+    }
+}
+
+#adminSidebar {
+    background-color: #0B0C1D;
+    color: #F5D38C;
+    border: none;
+    margin: 0;
+}
+
+}
+
+    #adminSidebar .nav-link {
+        color: #F5D38C;
+    }
+
+        #adminSidebar .nav-link:hover {
+            background-color: #8B1E3F;
+            color: #fff;
+        }

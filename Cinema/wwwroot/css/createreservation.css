@@ -11,7 +11,7 @@
     font-size: 20px;
     letter-spacing: 3px;
     background: linear-gradient(to right, #6c757d, #343a40);
-    color: white;
+    color: #f0c75e;
     padding: 12px;
     border-radius: 10px;
     text-align: center;
@@ -131,9 +131,9 @@
 }
 
     .btn-reserve:hover {
-        background-color: #c9972d; /* по-тъмен златист при hover */
+        background-color: #c9972d;
         border-color: #c9972d;
-        color: #fff; /* текстът става бял при hover */
+        color: #fff; 
     }
 
 

@@ -14,7 +14,7 @@ html {
 }
 
 body {
-    margin: 0; /* махаме margin-bottom, ще използваме flex */
+    margin: 0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -196,35 +196,21 @@ button.accept-policy {
     line-height: inherit;
 }
 
-/* Admin Sidebar Styles */
-#adminSidebar {
-    transition: transform 0.3s ease;
-    position: relative;
-    z-index: 1;
-}
-
-#mainContent {
-    position: relative;
-    z-index: 2;
-}
-
-@media (max-width: 768px) {
-    #adminSidebar {
-        transform: translateX(-100%);
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-        z-index: 1000;
-        width: 200px;
-        background-color: #f8f9fa;
-    }
-
-        #adminSidebar.show {
-            transform: translateX(0);
-        }
-
-    #mainContent {
-        margin-left: 0;
-    }
+/* Махане на промяната на цвета при клик */
+.btn-danger:focus,
+.btn-danger:active,
+.btn-danger:focus:active,
+.btn-success:focus,
+.btn-success:active,
+.btn-success:focus:active,
+.btn-outline-dark:focus,
+.btn-outline-dark:active,
+.btn-outline-dark:focus:active,
+.btn-outline-primary:focus,
+.btn-outline-primary:active,
+.btn-outline-primary:focus:active {
+    background-color: inherit !important;
+    border-color: inherit !important; 
+    color: inherit !important; 
+    box-shadow: none !important; 
 }

@@ -18,12 +18,43 @@ namespace Cinema.Controllers
         }
 
         // GET: Projections
-        public async Task<IActionResult> Index()
-        {
-            var projections = await _context.Projections
+        public async Task<IActionResult> Index(string searchString, string sortOrder)
+        { 
+            ViewBag.IsAdminView = false;
+            var projectionsQuery = _context.Projections
                 .Include(p => p.Hall)
                 .Include(p => p.Movie)
-                .ToListAsync();
+                .AsQueryable();
+
+            // Филтриране по заглавие на филма
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                projectionsQuery = projectionsQuery
+                    .Where(p => p.Movie.Title.Contains(searchString));
+                ViewBag.CurrentFilter = searchString;
+            }
+
+            // Сортиране
+            projectionsQuery = sortOrder switch
+            {
+                "title_desc" => projectionsQuery.OrderByDescending(p => p.Movie.Title),
+                "title_asc" => projectionsQuery.OrderBy(p => p.Movie.Title),
+                "time_desc" => projectionsQuery.OrderByDescending(p => p.ProjectionTime),
+                "time_asc" => projectionsQuery.OrderBy(p => p.ProjectionTime),
+                _ => projectionsQuery.OrderBy(p => p.ProjectionTime),
+            };
+
+            // Подготвяме опциите за селекта
+            ViewBag.SortOptions = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "time_asc", Text = "Time Ascending" },
+        new SelectListItem { Value = "time_desc", Text = "Time Descending" },
+        new SelectListItem { Value = "title_asc", Text = "Title A-Z" },
+        new SelectListItem { Value = "title_desc", Text = "Title Z-A" }
+    };
+            ViewBag.CurrentSort = sortOrder;
+
+            var projections = await projectionsQuery.ToListAsync();
 
             // Създаваме речник за броя заети билети на всяка прожекция
             var ticketsCount = await _context.Tickets

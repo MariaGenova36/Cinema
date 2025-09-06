@@ -312,16 +312,13 @@ namespace Cinema.Controllers
             return View();
         }
 
+        //HTTP отговор – връща PNG изображение директно на браузъра
         public IActionResult QRCode(int id)
         {
             var ticket = _context.Tickets.Find(id);
             if (ticket == null) return NotFound();
 
-            using var qrGenerator = new QRCodeGenerator();
-            var qrData = qrGenerator.CreateQrCode(id.ToString(), QRCodeGenerator.ECCLevel.Q);
-            var qrCode = new PngByteQRCode(qrData);
-            byte[] qrBytes = qrCode.GetGraphic(20);
-
+            var qrBytes = QRCodeGeneratorBytes(id);
             return File(qrBytes, "image/png");
         }
 
@@ -357,7 +354,7 @@ namespace Cinema.Controllers
                         row.RelativeItem().Padding(5).Column(col =>
                         {
                             col.Spacing(8);
-                            col.Item().Text("CINEMA TICKET").FontSize(14).Bold().AlignCenter();
+                            col.Item().Text("STARLUXE CINEMA TICKET").FontSize(14).Bold().AlignCenter();
                             col.Item().LineHorizontal(1).LineColor(Colors.Black);
                             col.Item().Text($"Movie: {ticket.Projection.Movie.Title}").FontSize(11).Bold();
                             col.Item().Text($"Date & Time: {ticket.Projection.ProjectionTime:dd.MM.yyyy HH:mm}").FontSize(10);
@@ -386,10 +383,17 @@ namespace Cinema.Controllers
 
                             qrCol.Item().Text("SCAN HERE").AlignCenter().FontSize(10).Bold();
 
-                            qrCol.Item().Height(100).AlignCenter().AlignMiddle().Element(qrContainer =>
+                            qrCol.Item()
+                            .Height(100)
+                            .AlignCenter()
+                            .AlignMiddle()
+                            .Element(qrContainer =>
                             {
-                                qrContainer.Image(new MemoryStream(qrBytes), ImageScaling.FitArea);
-                            });
+                                // Зареждаме изображението от байтов масив
+                                var imageDescriptor = qrContainer.Image(qrBytes);
+                                // Можем да приложим допълнителни настройки към imageDescriptor
+                                imageDescriptor.FitArea();
+                                });
 
                             // Долна перфорация
                             qrCol.Item().AlignCenter().Row(r =>
@@ -409,11 +413,11 @@ namespace Cinema.Controllers
                 });
             }).GeneratePdf();
 
-            return File(pdfBytes, "application/pdf", $"Ticket_{ticket.Id}.pdf");
+            return File(pdfBytes, "application/pdf", $"Starluxe Ticket_{ticket.Id}.pdf");
         }
 
 
-        // Вземане на байтовете на QR кода чрез съществуващия метод
+        // Вземане на байтовете на QR кода чрез съществуващия метод;QR кода в PDF, имейл, друг поток, без да се записва файл
         private byte[] QRCodeGeneratorBytes(int id)
         {
             using var qrGenerator = new QRCoder.QRCodeGenerator();
@@ -421,6 +425,5 @@ namespace Cinema.Controllers
             var qrCode = new QRCoder.PngByteQRCode(qrData);
             return qrCode.GetGraphic(20);
         }
-
     }
 }

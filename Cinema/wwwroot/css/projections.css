@@ -6,7 +6,7 @@
 }
 
 .overlay {
-    background: rgba(30,30,30,0.9); /* overlay за четливост */
+    background: rgba(30,30,30,0.9);
     color: #fff;
     padding: 40px 0;
     box-shadow: 0 0 12px rgba(214, 169, 77, 0.3);
@@ -14,8 +14,10 @@
 
 .cinema-title {
     background: linear-gradient(90deg, #d6a94d, #e8b958, #f5d38c);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
     text-shadow: 0 0 4px #d6a94d, 0 0 8px #e8b958;
 }
 
@@ -79,4 +81,73 @@
     .btn-buy:hover {
         background-color: #d6a94d;
         color: #000;
+    }
+
+.btn-action {
+    display: inline-block !important;
+    width: auto !important;
+    padding: 8px 16px !important;
+    border-radius: 8px !important;
+    border: 1px solid #e3ae42 !important;
+    background-color: #d6a94d !important;
+    color: #000 !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    transition: 0.3s !important;
+    text-align: center !important;
+}
+
+    .btn-action:hover {
+        background-color: #e8b958 !important;
+    }
+
+    .search-form input[type="text"] {
+        width: 180px !important;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #d6a94d;
+        background-color: rgba(47, 47, 47, 0.7);
+        color: #fff;
+    }
+
+    .search-form input[type="text"]::placeholder {
+        color: #e3ae42;
+    }
+
+.search-form select {
+    padding: 10px 30px 10px 10px; /* място за стрелката */
+    border-radius: 8px;
+    width: 155px !important;
+    border: 1px solid #d6a94d;
+    background-color: rgba(47, 47, 47, 0.7);
+    color: #e3ae42; /* златен текст */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    /* стрелка чрез background */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23e3ae42" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px 16px;
+}
+
+
+    .search-form select option {
+        background-color: rgba(47, 47, 47, 0.7);
+        color: #e3ae42;
+    }
+
+.search-form .btn-clear {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #d6a94d;
+    background-color: rgba(47, 47, 47, 0.7);
+    color: #e3ae42;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+    .search-form .btn-clear:hover {
+        background-color: #2f2f2f;
+        color: #fff;
     }

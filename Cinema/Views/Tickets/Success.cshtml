@@ -6,21 +6,18 @@
 
 <div class="success-container d-flex justify-content-center align-items-center vh-100">
     <div class="card shadow-lg p-5 text-center success-card fade-up">
-        <div class="mb-3">
-            <span class="display-1 text-success">✔</span>
-        </div>
-        <h2 class="text-success mb-3">Reservation Confirmed!</h2>
+        <h2 class="mb-3">Reservation Confirmed!</h2>
         <p class="lead mb-4">Thank you for your reservation. Your ticket is now active.</p>
 
         <hr />
 
         <p class="mb-4">
             You can view your tickets anytime in
-            <a asp-controller="Profile" asp-action="Index" class="fw-bold text-decoration-none text-info">your profile</a>.
+            <a asp-controller="Profile" asp-action="Index" class="fw-bold text-decoration-none text-gold">your profile</a>.
         </p>
 
         <div>
-            <a asp-controller="Projections" asp-action="Index" class="btn btn-primary btn-lg me-2">
+            <a asp-controller="Projections" asp-action="Index" class="btn btn-confirm btn-lg me-2">
                 Back to Projections
             </a>
         </div>

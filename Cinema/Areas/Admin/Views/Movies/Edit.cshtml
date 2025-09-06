@@ -5,62 +5,167 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Edit the movie</h1>
-
-<form asp-action="Edit" method="post" enctype="multipart/form-data">
-    <input type="hidden" asp-for="Id" />
-
-    <div class="form-group">
-        <label asp-for="Title"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <input asp-for="Description" class="form-control" />
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="GenreId" class="control-label"></label>
-        <select asp-for="GenreId" class="form-control" asp-items="ViewBag.Genres"></select>
-        <span asp-validation-for="GenreId" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="Duration"></label>
-        <input asp-for="Duration" class="form-control" type="time" step="60" />
-        <span asp-validation-for="Duration" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="ReleaseDate"></label>
-        <input asp-for="ReleaseDate" type="date" class="form-control" />
-        <span asp-validation-for="ReleaseDate" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="PosterFile"></label>
-        <input asp-for="PosterFile" type="file" class="form-control" />
-        <span asp-validation-for="PosterFile" class="text-danger"></span>
-    </div>
-
-    @if (!string.IsNullOrEmpty(Model.PosterUrl))
-    {
-        <div class="form-group">
-            <label>Current Poster</label><br />
-            <img src="@Model.PosterUrl" style="height:150px;" />
-        </div>
+<style>
+    /* --- Page Background --- */
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: url('/images/pngtree-light-effect-particles-moving-starry-sky-background-picture-image_1439238.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: #fff;
     }
 
-    <button type="submit" class="btn btn-primary">Save</button>
-</form>
+    /* --- Container / Overlay --- */
+    .page-container {
+        background: rgba(30, 30, 30, 0.9);
+        padding: 30px;
+        border-radius: 12px;
+        margin: 20px auto;
+        max-width: 600px;
+        box-shadow: 0 0 20px rgba(214, 169, 77, 0.3);
+    }
 
-<div>
-    <a asp-action="Index">Back to List</a>
+    /* --- Heading --- */
+    h1 {
+        font-size: 2rem;
+        background: linear-gradient(90deg, #d6a94d, #e8b958, #f5d38c);
+        -webkit-background-clip: text !important;
+        background-clip: text !important;
+        color: transparent !important;
+        -webkit-text-fill-color: transparent !important;
+        text-shadow: 0 0 6px #d6a94d, 0 0 12px #e8b958;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    /* --- Form Groups --- */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #e8b958;
+        }
+
+    /* --- Inputs & Selects --- */
+    .form-input, .form-select, .form-file {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #d6a94d;
+        background-color: rgba(47, 47, 47, 0.7);
+        color: #fff;
+    }
+
+        .form-input:focus, .form-select:focus, .form-file:focus {
+            outline: none;
+            border-color: #f5d38c;
+            box-shadow: 0 0 8px rgba(214, 169, 77, 0.7);
+        }
+
+    /* --- Validation --- */
+    .text-danger {
+        color: #ff6b6b;
+        font-size: 0.9rem;
+    }
+
+    /* --- Poster Preview --- */
+    .poster-preview img {
+        border-radius: 8px;
+        border: 1px solid #d6a94d;
+        margin-top: 8px;
+    }
+
+    /* --- Buttons --- */
+    .btn-gold {
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: 1px solid #e3ae42;
+        background-color: #d6a94d;
+        color: #000;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .btn-gold:hover {
+            background-color: #e8b958;
+        }
+
+    .btn-link {
+        display: inline-block;
+        margin-top: 15px;
+        color: #d6a94d !important;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+
+        .btn-link:hover {
+            text-shadow: 0 0 4px #d6a94d, 0 0 8px #e8b958;
+        }
+</style>
+
+<div class="page-container fade-in">
+    <h1>Edit the Movie</h1>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" class="form-input" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            <input asp-for="Description" class="form-input" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="GenreId"></label>
+            <select asp-for="GenreId" class="form-select" asp-items="ViewBag.Genres"></select>
+            <span asp-validation-for="GenreId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Duration"></label>
+            <input asp-for="Duration" type="time" step="60" class="form-input" />
+            <span asp-validation-for="Duration" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ReleaseDate"></label>
+            <input asp-for="ReleaseDate" type="date" class="form-input" />
+            <span asp-validation-for="ReleaseDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PosterFile"></label>
+            <input asp-for="PosterFile" type="file" class="form-file" />
+            <span asp-validation-for="PosterFile" class="text-danger"></span>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.PosterUrl))
+        {
+            <div class="form-group poster-preview">
+                <label>Current Poster</label><br />
+                <img src="@Model.PosterUrl" style="height:150px;" />
+            </div>
+        }
+
+        <button type="submit" class="btn-gold">Save</button>
+    </form>
+
+    <div>
+        <a asp-action="Index" class="btn-link">Back to List</a>
+    </div>
 </div>
-
 
 @section Scripts {
     @{

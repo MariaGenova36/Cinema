@@ -1,0 +1,138 @@
+﻿body {
+    background-image: url('/images/pngtree-light-effect-particles-moving-starry-sky-background-picture-image_1439238.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: #f1f1f1;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Gold color */
+.text-gold {
+    color: #fcd279 !important;
+}
+
+h2, h3 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #FFEB7F;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7),
+    0 0 10px rgba(255,235,127,0.6); /* лек блясък */
+}
+
+h4 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #FFEB7F; 
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7),
+    0 0 10px rgba(255,235,127,0.6); /* лек блясък */
+}
+
+/* Cards */
+.card {
+    border-radius: 15px;
+    background: rgba(47, 47, 47, 0.85); /* полупрозрачен за фон */
+    box-shadow: 0 6px 25px rgba(0,0,0,0.7);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Form inputs */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #444;
+    background-color: #2f2f2f;
+    color: #fff;
+}
+
+    .form-control:focus {
+        border-color: #FFD700;
+        box-shadow: 0 0 8px rgba(255,215,0,0.6);
+    }
+
+/* Buttons */
+.btn-gold {
+    background: linear-gradient(to right, #FFD700, #FFC700);
+    border: none;
+    color: #000;
+    font-weight: bold;
+}
+
+    .btn-gold:hover {
+        background: linear-gradient(to right, #FFC700, #FFB700);
+        transform: scale(1.05);
+    }
+
+/* Tickets Table */
+.table-dark {
+    background-color: rgba(47, 47, 47, 0.85);
+    border-radius: 12px;
+}
+
+.ticket-table th, .ticket-table td {
+    vertical-align: middle;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: rgba(255,255,255,0.05);
+}
+
+/* Ticket row effect */
+.ticket-row {
+    border-left: 4px solid #d6a94d;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 8px;
+    margin-bottom: 6px;
+}
+
+    .ticket-row:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(255,215,0,0.5);
+    }
+
+/* QR code cell with glow */
+.qr-cell img {
+    border: 2px solid #FFD700;
+    border-radius: 6px;
+    box-shadow: 0 0 10px rgba(255,215,0,0.7);
+}
+
+/* Badge colors */
+.badge.bg-gold {
+    background-color: #FFD700 !important;
+    color: #000 !important;
+}
+
+.badge.bg-secondary {
+    background-color: #6c757d !important;
+}
+
+/* PDF button outline gold */
+.btn-outline-gold {
+    border: 1px solid #FFD700;
+    color: #FFD700;
+}
+
+    .btn-outline-gold:hover {
+        background-color: #FFD700;
+        color: #000;
+    }
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-up {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
+}

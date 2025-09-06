@@ -1,7 +1,6 @@
 body {
     background: linear-gradient(to bottom, #0d0d0d, #1a1a1a, #262626);
     color: #f1f1f1;
-    font-family: 'Arial', sans-serif;
 }
 
 /* Контейнер за Success */
@@ -19,7 +18,7 @@ body {
 }
 
 /* Fade-in + slide-up анимация */
-@@keyframes fadeInUp {
+@keyframes fadeInUp {
     0% {
         opacity: 0;
         transform: translateY(30px);
@@ -32,27 +31,34 @@ body {
 }
 
 /* Заглавия и текст */
-h2, p {
-    color: #f1f1f1;
+h2 {
+    color: #F5D38C;
+}
+
+p {
+    color: white;
 }
 
 /* Бутон Primary */
-.btn-primary {
-    background: linear-gradient(to right, #0d6efd, #0b5ed7);
-    border: none;
-    transition: all 0.2s ease-in-out;
+.btn-confirm {
+    background-color: #e3ae42 ;
+    border: 2px solid #e3ae42;
+    color: #0B0C1D;
+    font-weight: 600;
+    transition: all 0.3s ease-in-out;
 }
 
-    .btn-primary:hover {
-        background: linear-gradient(to right, #0b5ed7, #0a58ca);
-        transform: scale(1.05);
+    .btn-confirm:hover {
+        background-color: #c9972d;
+        border-color: #c9972d;
+        color: #fff;
     }
 
-/* Линк към профила */
-a.text-info {
-    color: #0dcaf0;
+/* Линк към профила в златно */
+.success-card p a.text-gold {
+    color: #F5D38C !important;
 }
 
-    a.text-info:hover {
+    .success-card p a.text-gold:hover {
         text-decoration: underline;
     }
