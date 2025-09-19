@@ -83,7 +83,6 @@ namespace Cinema.Areas.Admin.Controllers
             return View(await tickets.ToListAsync());
         }
 
-
         [HttpPost]
         public async Task<IActionResult> DeleteReservation(int id)
         {

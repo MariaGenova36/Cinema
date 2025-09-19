@@ -1,16 +1,11 @@
-﻿/* =============================
-   Фон на страницата
-============================= */
-body {
+﻿body {
     background: url('/images/pngtree-light-effect-particles-moving-starry-sky-background-picture-image_1439238.jpg') no-repeat center center fixed;
     background-size: cover;
     position: relative;
     overflow-x: hidden;
 }
 
-/* =============================
-   Overlay
-============================= */
+/* Overlay */
 .overlay {
     background: rgba(30, 30, 30, 0.9);
     color: #fff;
@@ -21,9 +16,7 @@ body {
     padding: 0 4px;
 }
 
-/* =============================
-   Филм-лента и анимации
-============================= */
+/* Film-strip and animation */
 .film-strip {
     position: relative;
     height: 80px;
@@ -90,9 +83,7 @@ body {
     margin-bottom: 60px;
 }
 
-/* =============================
-   Заглавие
-============================= */
+/* Title */
 .cinema-title {
     position: relative;
     display: inline-block;
@@ -104,9 +95,7 @@ body {
     text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
 }
 
-/* =============================
-   Fade-in ефект
-============================= */
+/* Fade-in effect */
 .fade-in {
     opacity: 0;
     transform: translateY(20px);
@@ -120,9 +109,7 @@ body {
     }
 }
 
-/* =============================
-   Карти
-============================= */
+/* Cards */
 .card {
     transition: transform 0.4s, box-shadow 0.4s, background 0.4s;
     background: linear-gradient(145deg, #222, #111);
@@ -134,9 +121,7 @@ body {
         background: linear-gradient(145deg, #333, #111);
     }
 
-/* =============================
-   Контактна форма
-============================= */
+/* Contact form */
 .contact-form-container {
     max-width: 640px;
     margin: 40px auto;

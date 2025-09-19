@@ -65,7 +65,7 @@ namespace Cinema.Areas.Admin.Controllers
 
             ViewBag.Genres = new SelectList(await _context.Genres.ToListAsync(), "Id", "Name");
 
-            // Тук зареждаме view-то от админ папката, което прави partial с публичния изглед
+            // Тук зареждаме view-то от админ папката (partial с публичния изглед)
             return View(await movies.ToListAsync());
         }
 

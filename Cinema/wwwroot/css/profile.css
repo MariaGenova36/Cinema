@@ -18,7 +18,7 @@ h2, h3 {
     color: #FFEB7F;
     letter-spacing: 2px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.7),
-    0 0 10px rgba(255,235,127,0.6); /* лек блясък */
+    0 0 10px rgba(255,235,127,0.6); 
 }
 
 h4 {
@@ -27,13 +27,13 @@ h4 {
     color: #FFEB7F; 
     letter-spacing: 2px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.7),
-    0 0 10px rgba(255,235,127,0.6); /* лек блясък */
+    0 0 10px rgba(255,235,127,0.6);
 }
 
 /* Cards */
 .card {
     border-radius: 15px;
-    background: rgba(47, 47, 47, 0.85); /* полупрозрачен за фон */
+    background: rgba(47, 47, 47, 0.85); 
     box-shadow: 0 6px 25px rgba(0,0,0,0.7);
     animation: fadeInUp 0.8s ease-out forwards;
 }

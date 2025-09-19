@@ -3,12 +3,12 @@ body {
     color: #f1f1f1;
 }
 
-/* Контейнер за Success */
+/* Success */
 .success-container {
     padding: 20px;
 }
 
-/* Карта */
+/* Card */
 .success-card {
     max-width: 600px;
     border-radius: 15px;
@@ -17,7 +17,7 @@ body {
     animation: fadeInUp 0.8s ease-out forwards;
 }
 
-/* Fade-in + slide-up анимация */
+/* Fade-in + slide-up animation */
 @keyframes fadeInUp {
     0% {
         opacity: 0;
@@ -30,7 +30,7 @@ body {
     }
 }
 
-/* Заглавия и текст */
+/* Header + text */
 h2 {
     color: #F5D38C;
 }
@@ -39,7 +39,7 @@ p {
     color: white;
 }
 
-/* Бутон Primary */
+/* Primary Button */
 .btn-confirm {
     background-color: #e3ae42 ;
     border: 2px solid #e3ae42;
@@ -54,7 +54,7 @@ p {
         color: #fff;
     }
 
-/* Линк към профила в златно */
+/* Profile link in gold */
 .success-card p a.text-gold {
     color: #F5D38C !important;
 }

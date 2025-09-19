@@ -108,9 +108,9 @@ body::before {
     100% { opacity: 0.3; }
 }
 
-/* Layout за login page */
+/* Layout login page */
 body.login-page .main-content {
-    flex: 0 0 auto; /* спира разтягането */
+    flex: 0 0 auto; /* stops the distance */
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -132,5 +132,5 @@ body.login-page .main-content {
 }
 
     .login-container .login-card {
-        transform: translateY(60px) !important; /* премества картата надолу без да променя layout-а */
+        transform: translateY(60px) !important; /* moves the card down without changing the layout */
     }

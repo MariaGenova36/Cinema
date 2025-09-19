@@ -1,6 +1,4 @@
-/* =============================
-   Базови стилове
-============================= */
+/* Base styles */
 html {
     font-size: 14px;
     position: relative;
@@ -20,16 +18,12 @@ body {
     min-height: 100vh;
 }
 
-/* =============================
-   Main content за разтягане
-============================= */
+/* Main content за разтягане */
 .main-content {
-    flex: 1; /* разтяга съдържанието между navbar и footer */
+    flex: 1; /* space between navbar and footer */
 }
 
-/* =============================
-   Фокус ефекти
-============================= */
+/* Focus effects */
 .btn:focus,
 .btn:active:focus,
 .btn-link.nav-link:focus,
@@ -38,9 +32,7 @@ body {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-/* =============================
-   Form-floating placeholders
-============================= */
+/* Form-floating placeholders */
 .form-floating > .form-control-plaintext::placeholder,
 .form-floating > .form-control::placeholder {
     color: var(--bs-secondary-color);
@@ -52,9 +44,7 @@ body {
     text-align: start;
 }
 
-/* =============================
-   Navbar стилове
-============================= */
+/* Navbar styles */
 .navbar {
     background-color: #0B0C1D !important;
     border-bottom: 1px solid #2a2a3d;
@@ -85,7 +75,7 @@ nav.navbar i.bi {
         font-weight: 600;
     }
 
-/* Navbar текст и бутони */
+/* Navbar text and buttons */
 .navbar-nav .nav-link {
     font-size: 1.1rem;
     font-weight: 400;
@@ -97,9 +87,7 @@ nav.navbar i.bi {
     padding: 10px 20px;
 }
 
-/* =============================
-   Дясна секция: Admin/Login/Register/Logout
-============================= */
+/* Right section: Admin/Login/Register/Logout */
 .navbar-nav.ms-auto,
 .user-actions {
     display: flex;
@@ -150,16 +138,12 @@ nav.navbar i.bi {
         padding-left: 12px;
     }
 
-/* =============================
-   Глобални линкове извън navbar
-============================= */
+/* Global links outside of navbar */
 body a:not(.nav-link):not(.navbar-brand):not(.btn) {
     color: #0077cc;
 }
 
-/* =============================
-   Footer
-============================= */
+/* Footer */
 .footer {
     width: 100%;
     white-space: nowrap;
@@ -170,9 +154,7 @@ body a:not(.nav-link):not(.navbar-brand):not(.btn) {
     z-index: 1000;
 }
 
-/* =============================
-   Bootstrap overrides
-============================= */
+/* Bootstrap overrides */
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;
@@ -196,7 +178,7 @@ button.accept-policy {
     line-height: inherit;
 }
 
-/* Махане на промяната на цвета при клик */
+/* Remove the color from bootstrap u see on click */
 .btn-danger:focus,
 .btn-danger:active,
 .btn-danger:focus:active,

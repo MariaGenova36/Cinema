@@ -104,8 +104,8 @@
 }
 
 .search-form {
-    gap: 8px; /* разстояние между елементите */
-    flex-wrap: wrap; /* за адаптивност */
+    gap: 8px; 
+    flex-wrap: wrap; 
 }
 
 .btn-action {

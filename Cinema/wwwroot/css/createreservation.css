@@ -3,7 +3,7 @@
     color: #F5D38C;
 }
 
-/* Екран */
+/* Screen */
 .screen-indicator {
     width: 80%;
     margin: 0 auto 20px auto;
@@ -18,7 +18,7 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
-/* Контейнер за салона */
+/* Container for the salon */
 .seat-grid-wrapper {
     display: flex;
     flex-direction: column;
@@ -31,14 +31,12 @@
     box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
 }
 
-/* Ред с места */
 .seat-row {
     display: flex;
     gap: 8px;
     justify-content: center;
 }
 
-/* Бутон за място */
 .seat-btn {
     width: 45px;
     height: 45px;
@@ -56,14 +54,12 @@
         background-color: rgba(40,167,69,0.2);
     }
 
-    /* Избрано място */
     .seat-btn.seat-selected {
         background-color: #0d6efd;
         color: white;
         border-color: #0d6efd;
     }
 
-    /* Заето място */
     .seat-btn:disabled {
         background-color: #dc3545;
         border-color: #dc3545;
@@ -71,7 +67,6 @@
         pointer-events: none;
     }
 
-/* Легенда */
 .legend {
     margin-top: 15px;
     display: flex;
@@ -93,7 +88,6 @@
     border-radius: 4px;
 }
 
-/* Анимация за fade-in + slide-up */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -106,17 +100,15 @@
     }
 }
 
-/* Анимация за екрана */
+/* Animanitons */
 .screen-indicator {
     animation: fadeInUp 0.8s ease-out;
 }
 
-/* Анимация за grid контейнера */
 .seat-grid-wrapper {
     animation: fadeInUp 1s ease-out;
 }
 
-/* Анимация за бутоните (леко закъснение за по-кино ефект) */
 .seat-btn {
     opacity: 0;
     animation: fadeInUp 0.6s ease-out forwards;
@@ -135,8 +127,6 @@
         border-color: #c9972d;
         color: #fff; 
     }
-
-
 
 .mt-4 {
     margin-bottom: 20px; /* разстояние до footer-а */

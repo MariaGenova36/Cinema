@@ -1,8 +1,112 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿ @{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Starluxe Cinema</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/home.css" />
+</head>
+<body>
+    <div class="overlay">
+
+        <!-- Hero -->
+        <section class="hero">
+            <h1 class="flicker">
+                Welcome to Starluxe Cinema
+            </h1>
+            <p>Your luxury movie experience starts here</p>
+            <a href="@Url.Action("Index", "Projections")" class="btn-main">See Now Playing</a>
+        </section>
+
+        <!-- Now Playing -->
+        <section class="section">
+            <h2>Now Playing</h2>
+            <div class="movie-grid">
+                <div class="movie-card">
+                    <img src="~/images/515013263_122193827396283310_6102226195887158870_n.jpg" alt="Movie 1">
+                    <h3>Jurassic World: Rebirth</h3>
+                    <p>Action · 82 min</p>
+                    <a href="@Url.Action("Index", "Projections")" class="btn-book">Book Ticket</a>
+                </div>
+                <div class="movie-card">
+                    <img src="~/images/inception_(2010)_theatrical_poster.jpg" alt="Movie 2">
+                    <h3>Inception</h3>
+                    <p>Horror · 85 min</p>
+                    <a href="@Url.Action("Index", "Projections")" class="btn-book">Book Ticket</a>
+                </div>
+                <div class="movie-card">
+                    <img src="~/images/lord_rings_fellowship_ring.jpg" alt="Movie 3">
+                    <h3>The Lord of the Rings: The Fellowship of the Ring</h3>
+                    <p>Fantasy · 178 min</p>
+                    <a href="@Url.Action("Index", "Projections")" class="btn-book">Book Ticket</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coming Soon -->
+        <section class="section">
+            <h2>Coming Soon</h2>
+            <div class="movie-grid">
+                <div class="movie-card">
+                    <img src="~/images/tron_ares_poster.jpg" alt="Movie 4">
+                    <h3>Tron:Ares</h3>
+                    <p>Release: Oct 2025</p>
+                </div>
+                <div class="movie-card">
+                    <img src="~/images/494350565_730643702652891_2460819429663397505_n.jpg" alt="Movie 5"> 
+                    <h3>Now You See Me:Now You Don't</h3>
+                    <p>Release: Nov 2025</p>
+                </div>
+                <div class="movie-card">
+                    <img src="~/images/dust-bunny_5cy9.jpg" alt="Movie 6">
+                    <h3>Dust Bunny</h3>
+                    <p>Release: Dec 2025</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Special Features -->
+        <section class="section">
+            <h2>Special Features</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <img src="~/images/gettyimages-1779743996-hxdbzxy-dolby-atmos.webp" alt="VIP">
+                    <h3>Dolby Atmos Sound</h3>
+                    <p>Feel the movie with 360° surround sound.</p>
+                </div>
+                <div class="feature-card">
+                    <img src="~/images/3dcinema.jpg" alt="3D">
+                    <h3>3D Experience</h3>
+                    <p>Enjoy immersive movies with cutting-edge 3D tech.</p>
+                </div>
+                <div class="feature-card">
+                    <img src="~/images/360_f_1637728375_o7elg8u9ri8tnqyemvtyk9uuvldp0yjl.jpg" alt="Snacks">
+                    <h3>Deluxe Snacks</h3>
+                    <p>Premium popcorn, drinks, and gourmet treats.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section class="section">
+            <h2>What Our Guests Say</h2>
+            <div class="testimonials">
+                <div class="testimonial">
+                    "The best cinema experience I've ever had. Luxury and comfort!"
+                </div>
+                <div class="testimonial">
+                    "Amazing sound and picture quality.I keep choosing this cinema."
+                </div>
+                <div class="testimonial">
+                    "Starluxe makes every movie night special. Highly recommend!"
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

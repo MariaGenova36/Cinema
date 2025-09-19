@@ -20,8 +20,6 @@ using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Threading.Tasks;
 
-
-
 namespace Cinema.Controllers
 {
     public class TicketsController : Controller
@@ -415,7 +413,6 @@ namespace Cinema.Controllers
 
             return File(pdfBytes, "application/pdf", $"Starluxe Ticket_{ticket.Id}.pdf");
         }
-
 
         // Вземане на байтовете на QR кода чрез съществуващия метод;QR кода в PDF, имейл, друг поток, без да се записва файл
         private byte[] QRCodeGeneratorBytes(int id)

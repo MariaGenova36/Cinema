@@ -42,7 +42,7 @@
                             <h5 class="card-title">@movie.Title</h5>
                             <p class="card-text flex-grow-1">@movie.Description</p>
                             <p class="mb-1"><strong>Genre:</strong> @movie.Genre?.Name</p>
-                            <p class="mb-1"><strong>Duration:</strong> @movie.Duration.ToString(@"h\:mm") ч.</p>
+                            <p class="mb-1"><strong>Duration:</strong> @movie.Duration.ToString(@"h\:mm") h.</p>
                             <p class="mb-3"><strong>Release:</strong> @movie.ReleaseDate.ToString("dd.MM.yyyy")</p>
                             <div>
                                 @if (ViewBag.IsAdminView == true)

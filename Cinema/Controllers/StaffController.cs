@@ -45,7 +45,7 @@ namespace Cinema.Controllers
                 .ThenInclude(p => p.Movie)
                 .Include(t => t.Projection)
                 .ThenInclude(p => p.Hall)
-                .Include(t => t.User) // 🔹 добавено
+                .Include(t => t.User) // добавено
                 .FirstOrDefaultAsync(t => t.Id == request.TicketId);
 
             if (ticket == null)
@@ -66,7 +66,7 @@ namespace Cinema.Controllers
                 movie = ticket.Projection.Movie.Title,
                 hall = ticket.Projection.Hall.Name,
                 seat = $"Row {ticket.SeatRow}, Seat {ticket.SeatColumn}",
-                user = ticket.User?.UserName // 🔹 за да имаш User и в JS
+                user = ticket.User?.UserName // за да имаш User и в JS
             });
         }
     }

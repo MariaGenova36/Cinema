@@ -8,7 +8,7 @@
     overflow-x: visible;
 }
 
-/* Overlay със съдържание */
+/* Overlay */
 .overlay {
     position: relative;
     background: rgba(0,0,0,0.9);
@@ -27,16 +27,16 @@
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 3px;
-    color: #d6a94d; /* основен тон */
+    color: #d6a94d; 
     text-align: center;
     margin-bottom: 30px;
-    /* Gradient за леко сияние */
+    /* Gradient for glow */
     background: linear-gradient(90deg, #d6a94d 30%, #dbc35a 60%, #e0b64c 90%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    /* Леко сияние около буквите */
+    /* Add a little bit of shine */
     text-shadow: 0 0 2px #d6a94d, 0 0 5px #dbc35a;
-    /* Пулсиращ ефект */
+    /* Pulsing effect */
     animation: softGlow 2.5s ease-in-out infinite alternate;
 }
 
@@ -50,11 +50,7 @@
     }
 }
 
-
-
-
-
-/* Fade-in анимации с delay */
+/* Fade-in animation with delay */
 .fade-in {
     opacity: 0;
     transform: translateY(20px);
@@ -88,7 +84,7 @@
     }
 }
 
-/* Прожектори */
+/* Spotlights */
 .spotlight {
     position: absolute;
     top: -100px;

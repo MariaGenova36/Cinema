@@ -14,6 +14,8 @@ namespace Cinema
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Configuration.AddUserSecrets<Program>();
+
             QuestPDF.Settings.License = LicenseType.Community;
 
             builder.Services.AddTransient<IEmailSender, EmailSender>();

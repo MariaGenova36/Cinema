@@ -2,137 +2,157 @@
     ViewData["Title"] = "Ticket Validation";
 }
 
-<h2>Ticket Validation</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Starluxe Cinema</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/validateticket.css" />
+</head>
+<body>
+    <div class="overlay">
+        <h2>Ticket Validation</h2>
 
-<!-- скрит формуляр само за да имаме Anti-Forgery токен при нужда -->
-<form id="af-form">@Html.AntiForgeryToken()</form>
+        <!-- Anti-forgery token -->
+        <form id="af-form">@Html.AntiForgeryToken()</form>
 
-<div id="qr-reader" style="max-width: 520px;"></div>
-<div id="result" class="mt-3"></div>
+        <div id="qr-reader" style="max-width: 520px;"></div>
+        <div id="result" class="mt-3"></div>
 
-<!-- резервен вариант: ръчно въвеждане на ID -->
-<div class="input-group" style="max-width: 520px;">
-    <input id="manual-id" type="number" class="form-control" placeholder="Enter Ticket ID manually">
-    <button id="manual-btn" class="btn btn-primary" type="button">Validate</button>
-</div>
+        <!-- Manual input -->
+        <div class="input-group" style="max-width: 520px;">
+            <input id="manual-id" type="number" class="form-control" placeholder="Enter Ticket ID manually">
+            <button id="manual-btn" class="btn btn-action" type="button">Validate</button>
+        </div>
 
-<hr />
-<h3>Previously Validated Tickets</h3>
-<table id="used-tickets" class="table table-striped">
-    <thead>
-        <tr>
-            <th>Movie</th>
-            <th>Projection Date</th>
-            <th>Seat Number</th>
-            <th>Purchase Time</th>
-            <th>Ticket Type</th>
-            <th>Price</th>
-            <th>User</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (ViewBag.UsedTickets != null && ((List<Cinema.Models.Ticket>)ViewBag.UsedTickets).Count > 0)
-        {
-            @foreach (var ticket in (List<Cinema.Models.Ticket>)ViewBag.UsedTickets)
-            {
+        <hr />
+
+        <h3>Previously Validated Tickets</h3>
+        <div style="overflow-x:auto;">
+        <table id="used-tickets" class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@ticket.Projection.Movie.Title</td>
-                    <td>@ticket.Projection.Hall.Name</td>
-                    <td>Row: @ticket.SeatRow, Seat: @ticket.SeatColumn</td>
-                    <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@ticket.TicketType</td>
-                    <td>@ticket.Price.ToString("F2") лв.</td>
-                    <td>@ticket.User.UserName</td>
+                    <th>Movie</th>
+                    <th>Projection Date</th>
+                    <th>Seat Number</th>
+                    <th>Purchase Time</th>
+                    <th>Ticket Type</th>
+                    <th>Price</th>
+                    <th>User</th>
                 </tr>
+            </thead>
+            <tbody>
+                @if (ViewBag.UsedTickets != null && ((List<Cinema.Models.Ticket>)ViewBag.UsedTickets).Count > 0)
+                {
+                    @foreach (var ticket in (List<Cinema.Models.Ticket>)ViewBag.UsedTickets)
+                    {
+                        <tr>
+                            <td>@ticket.Projection.Movie.Title</td>
+                            <td>@ticket.Projection.Hall.Name</td>
+                            <td>Row: @ticket.SeatRow, Seat: @ticket.SeatColumn</td>
+                            <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                            <td>@ticket.TicketType</td>
+                            <td>@ticket.Price.ToString("F2") лв.</td>
+                            <td>@ticket.User.UserName</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
+        <script>
+            function showError(msg) {
+                document.getElementById('result').innerHTML =
+                    `<div class="alert alert-danger">${msg}</div>`;
             }
-        }
-    </tbody>
-</table>
 
-@section Scripts {
-    <script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
-    <script>
-        function showError(msg) {
-            document.getElementById('result').innerHTML =
-                `<div class="alert alert-danger">${msg}</div>`;
-        }
+            function showSuccess(data) {
+                document.getElementById('result').innerHTML = `
+                    <div class="alert alert-success">
+                        <strong>Ticket Validated!</strong><br/>
+                        Movie: ${data.movie}<br/>
+                        Hall: ${data.hall}<br/>
+                        Seat: ${data.seat}
+                    </div>`;
 
-        function showSuccess(data) {
-            document.getElementById('result').innerHTML = `
-                <div class="alert alert-success">
-                    <strong>Ticket Validated!</strong><br/>
-                    Movie: ${data.movie}<br/>
-                    Hall: ${data.hall}<br/>
-                    Seat: ${data.seat}
-                </div>`;
-
-            // Добавяне в таблицата
-            const table = document.querySelector("#used-tickets tbody");
-            if (table) {
+                const table = document.querySelector("#used-tickets tbody");
+                      if (table) {
                 const row = document.createElement("tr");
-                row.innerHTML = `<td>${data.movie}</td><td>${data.hall}</td><td>${data.seat}</td><td>${new Date().toLocaleString()}</td>`;
+                row.innerHTML = `
+                    <td>${data.movie}</td>
+                    <td>${data.hall}</td>
+                    <td>${data.seat}</td>
+                    <td>${new Date().toLocaleString()}</td>
+                    <td>${data.ticketType || ''}</td>
+                    <td>${data.price ? data.price.toFixed(2) + ' лв.' : ''}</td>
+                    <td>${data.user || ''}</td>
+                `;
                 table.prepend(row);
             }
         }
 
-        function getAntiForgeryToken() {
-            const el = document.querySelector('#af-form input[name="__RequestVerificationToken"]');
-            return el ? el.value : null;
-        }
-
-        async function validateTicketId(ticketId) {
-            if (!ticketId || isNaN(ticketId)) {
-                showError("Invalid ticket id.");
-                return;
+            function getAntiForgeryToken() {
+                const el = document.querySelector('#af-form input[name="__RequestVerificationToken"]');
+                return el ? el.value : null;
             }
-            const headers = { 'Content-Type': 'application/json' };
-            const token = getAntiForgeryToken();
-            if (token) headers['RequestVerificationToken'] = token;
 
-            try {
-                const res = await fetch('/Staff/ValidateTicket', {
-                    method: 'POST',
-                    headers,
-                    body: JSON.stringify({ ticketId: parseInt(ticketId) })
-                });
-
-                if (!res.ok) {
-                    const text = await res.text();
-                    showError(text || `Request failed: ${res.status}`);
+            async function validateTicketId(ticketId) {
+                if (!ticketId || isNaN(ticketId)) {
+                    showError("Invalid ticket id.");
                     return;
                 }
-                const data = await res.json();
-                showSuccess(data);
+                const headers = { 'Content-Type': 'application/json' };
+                const token = getAntiForgeryToken();
+                if (token) headers['RequestVerificationToken'] = token;
+
+                try {
+                    const res = await fetch('/Staff/ValidateTicket', {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify({ ticketId: parseInt(ticketId) })
+                    });
+
+                    if (!res.ok) {
+                        const text = await res.text();
+                        showError(text || `Request failed: ${res.status}`);
+                        return;
+                    }
+                    const data = await res.json();
+                    showSuccess(data);
+                } catch (e) {
+                    console.error(e);
+                    showError('Error validating ticket.');
+                }
+            }
+
+            document.getElementById('manual-btn').addEventListener('click', () => {
+                const id = document.getElementById('manual-id').value;
+                validateTicketId(id);
+            });
+
+            function onScanSuccess(decodedText) {
+                validateTicketId(decodedText);
+            }
+
+            function onScanFailure(error) {}
+
+            try {
+                const scanner = new Html5QrcodeScanner(
+                    "qr-reader",
+                    { fps: 10, qrbox: 250, rememberLastUsedCamera: false },
+                    false
+                );
+                scanner.render(onScanSuccess, onScanFailure);
             } catch (e) {
                 console.error(e);
-                showError('Error validating ticket.');
+                showError("Camera could not be started. Make sure you're on https/localhost and camera access is allowed.");
             }
-        }
-
-        // Ръчно въвеждане
-        document.getElementById('manual-btn').addEventListener('click', () => {
-            const id = document.getElementById('manual-id').value;
-            validateTicketId(id);
-        });
-
-        // QR скенер
-        function onScanSuccess(decodedText) {
-            validateTicketId(decodedText);
-        }
-        function onScanFailure(error) {
-            // игнорирай
-        }
-
-        try {
-            const scanner = new Html5QrcodeScanner(
-                "qr-reader",
-                { fps: 10, qrbox: 250, rememberLastUsedCamera: false },
-                false
-            );
-            scanner.render(onScanSuccess, onScanFailure);
-        } catch (e) {
-            console.error(e);
-            showError("Camera could not be started. Make sure you're on https/localhost and camera access is allowed.");
-        }
-    </script>
-}
+        </script>
+    }
+</body>
+</html>
