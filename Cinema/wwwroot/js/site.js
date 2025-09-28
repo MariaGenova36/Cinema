@@ -41,7 +41,7 @@
         const seatsCount = selectedSeats.length || 1;
         const totalPrice = basePrice * multiplier * seatsCount;
 
-        priceSpan.textContent = totalPrice.toFixed(2) + " лв.";
+        priceSpan.textContent = totalPrice.toFixed(2) + " lv.";
 
         // Винаги записваме с точка, за да не зависи от културата
         if (ticketMultiplierInput) {

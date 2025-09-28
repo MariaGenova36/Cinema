@@ -6,9 +6,11 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Starluxe Cinema</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/css/validateticket.css" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 <body>
     <div class="overlay">
@@ -30,41 +32,43 @@
 
         <h3>Previously Validated Tickets</h3>
         <div style="overflow-x:auto;">
-        <table id="used-tickets" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Movie</th>
-                    <th>Projection Date</th>
-                    <th>Seat Number</th>
-                    <th>Purchase Time</th>
-                    <th>Ticket Type</th>
-                    <th>Price</th>
-                    <th>User</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (ViewBag.UsedTickets != null && ((List<Cinema.Models.Ticket>)ViewBag.UsedTickets).Count > 0)
-                {
-                    @foreach (var ticket in (List<Cinema.Models.Ticket>)ViewBag.UsedTickets)
+            <table id="used-tickets" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Movie</th>
+                        <th>Hall</th>
+                        <th>Projection Date</th>
+                        <th>Seat Number</th>
+                        <th>Purchase Time</th>
+                        <th>Ticket Type</th>
+                        <th>Price</th>
+                        <th>User</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.UsedTickets != null && ((List<Cinema.Models.Ticket>)ViewBag.UsedTickets).Count > 0)
                     {
-                        <tr>
-                            <td>@ticket.Projection.Movie.Title</td>
-                            <td>@ticket.Projection.Hall.Name</td>
-                            <td>Row: @ticket.SeatRow, Seat: @ticket.SeatColumn</td>
-                            <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
-                            <td>@ticket.TicketType</td>
-                            <td>@ticket.Price.ToString("F2") лв.</td>
-                            <td>@ticket.User.UserName</td>
-                        </tr>
+                        @foreach (var ticket in (List<Cinema.Models.Ticket>)ViewBag.UsedTickets)
+                        {
+                            <tr>
+                                <td>@ticket.Projection.Movie.Title</td>
+                                <td>@ticket.Projection.Hall.Name</td>
+                                <td>@ticket.Projection.ProjectionTime.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>Row: @ticket.SeatRow, Seat: @ticket.SeatColumn</td>
+                                <td>@ticket.PurchaseTime.ToLocalTime().ToString("dd.MM.yyyy HH:mm")</td>
+                                <td>@ticket.TicketType</td>
+                                <td>@ticket.Price.ToString("F2") lv.</td>
+                                <td>@ticket.User.UserName</td>
+                            </tr>
+                        }
                     }
-                }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
         </div>
     </div>
 
     @section Scripts {
-        <script src="https://unpkg.com/html5-qrcode@2.3.7/minified/html5-qrcode.min.js"></script>
+        <script src="~/js/html5-qrcode.min.js"></script>
         <script>
             function showError(msg) {
                 document.getElementById('result').innerHTML =
@@ -77,24 +81,30 @@
                         <strong>Ticket Validated!</strong><br/>
                         Movie: ${data.movie}<br/>
                         Hall: ${data.hall}<br/>
-                        Seat: ${data.seat}
+                        Projection Date: ${data.projectionDate}<br/>
+                        Seat: ${data.seat}<br/>
+                        Purchase Time: ${new Date().toLocaleString()}<br/>
+                        Type: ${data.ticketType}<br/>
+                        Price: ${data.price}<br />
+                        User: ${data.user}
                     </div>`;
 
                 const table = document.querySelector("#used-tickets tbody");
-                      if (table) {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${data.movie}</td>
-                    <td>${data.hall}</td>
-                    <td>${data.seat}</td>
-                    <td>${new Date().toLocaleString()}</td>
-                    <td>${data.ticketType || ''}</td>
-                    <td>${data.price ? data.price.toFixed(2) + ' лв.' : ''}</td>
-                    <td>${data.user || ''}</td>
-                `;
-                table.prepend(row);
+                if (table) {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${data.movie}</td>
+                        <td>${data.hall}</td>
+                        <td>${data.projectionDate}</td>
+                        <td>${data.seat}</td>
+                        <td>${new Date().toLocaleString()}</td>
+                        <td>${data.ticketType || ''}</td>
+                        <td>${data.price ? data.price.toFixed(2) + ' lv.' : ''}</td>
+                        <td>${data.user || ''}</td>
+                    `;
+                    table.prepend(row);
+                }
             }
-        }
 
             function getAntiForgeryToken() {
                 const el = document.querySelector('#af-form input[name="__RequestVerificationToken"]');
@@ -135,22 +145,37 @@
                 validateTicketId(id);
             });
 
-            function onScanSuccess(decodedText) {
+                       function onScanSuccess(decodedText) {
+                // Спри скенера преди валидация
+                if (window.qrScanner) {
+                    window.qrScanner.clear();
+                }
                 validateTicketId(decodedText);
             }
 
-            function onScanFailure(error) {}
+            function onScanFailure(error) {
+                // Не показваме грешки тук, защото се случват често по време на сканиране
+            }
 
-            try {
-                const scanner = new Html5QrcodeScanner(
-                    "qr-reader",
-                    { fps: 10, qrbox: 250, rememberLastUsedCamera: false },
-                    false
-                );
-                scanner.render(onScanSuccess, onScanFailure);
-            } catch (e) {
-                console.error(e);
-                showError("Camera could not be started. Make sure you're on https/localhost and camera access is allowed.");
+            // Проверка дали библиотеката е заредена
+                       // Промени тази част:
+            if (typeof Html5QrcodeScanner === 'undefined') {
+                console.error('html5-qrcode library not loaded!');
+                showError('QR scanner library failed to load. Check your internet connection.');
+            } else {
+                try {
+                    // Запази скенера в window.qrScanner
+                    window.qrScanner = new Html5QrcodeScanner(
+                        "qr-reader",
+                        { fps: 10, qrbox: 250, rememberLastUsedCamera: false },
+                        false
+                    );
+                    window.qrScanner.render(onScanSuccess, onScanFailure);
+                    console.log('QR Scanner initialized successfully');
+                } catch (e) {
+                    console.error('Scanner initialization error:', e);
+                    showError("Camera could not be started. Make sure you're on https/localhost and camera access is allowed.");
+                }
             }
         </script>
     }

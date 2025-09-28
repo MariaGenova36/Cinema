@@ -291,7 +291,7 @@ namespace Cinema.Controllers
     <li><strong>Hall:</strong> {projection.Hall.Name}</li>
     <li><strong>Ticket type:</strong> {ticketType}</li>
     <li><strong>Seats:</strong> {string.Join(", ", rows.Select((r, i) => $"Row {r}, Seat {cols[i]}"))}</li>
-    <li><strong>Total:</strong> {(projection.TicketPrice * multiplier * rows.Count):F2} лв.</li>
+    <li><strong>Total:</strong> {(projection.TicketPrice * multiplier * rows.Count):F2} lv.</li>
 </ul>
 
 <p style='font-family: Arial, sans-serif; color: #000000; font-size: 14px;'>Please keep this email for your records.</p>

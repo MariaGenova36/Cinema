@@ -65,8 +65,11 @@ namespace Cinema.Controllers
                 message = "Ticket validated successfully",
                 movie = ticket.Projection.Movie.Title,
                 hall = ticket.Projection.Hall.Name,
+                projectionDate = ticket.Projection.ProjectionTime.ToString("dd.MM.yyyy HH:mm"),
                 seat = $"Row {ticket.SeatRow}, Seat {ticket.SeatColumn}",
-                user = ticket.User?.UserName // за да имаш User и в JS
+                user = ticket.User?.UserName ,// за да имаш User и в JS
+                price = ticket.Price,
+                ticketType = ticket.TicketType
             });
         }
     }
