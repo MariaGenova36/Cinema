@@ -43,27 +43,65 @@ Update-Database
 Run the project
 
 ## Features
-User registration and login
+1. User registration and login
 
-Browse available movies and screenings
+2. Browse available movies and screenings
 
-Ticket reservations
+3. Ticket reservations
 
-Admin panel for managing:
+4. Admin panel for managing:
 
-Movies
+- Movies
 
-Screenings
+- Screenings
 
-Halls
+- Halls
 
-Users
+- Users
 
+5. Account
+
+6. Staff Panel for Validating Tickets by scanning the qr from the ticket
+   
 ## Screenshots
-Home Page
 
-Ticket Reservation
+### Home Page
+![Home Page](screenshots/Screenshot 2025-09-29 081834.png)
 
-Login & Registration
+### Privacy Page
+![Privacy Page](screenshots/Screenshot 2025-09-29 081922.png)
 
-Admin Panel
+### About Us Page
+![About Us Page](screenshots/Screenshot 2025-09-29 081946.png)
+![About Us Page](screenshots/Screenshot 2025-09-29 081959.png)
+![About Us Page](screenshots/Screenshot 2025-09-29 082015.png)
+
+### Movies Page
+![Movies Page](screenshots/Screenshot 2025-09-29 082041.png)
+
+### Projections Page
+![Projections Page](screenshots/Screenshot 2025-09-29 082058.png)
+
+### Projections Page
+![Projections Page](screenshots/Screenshot 2025-09-29 082122.png)
+
+### Admin Panel
+
+![Admin Panel](screenshots/Screenshot 2025-09-29 082146.png)
+![Admin Panel](screenshots/Screenshot 2025-09-29 082212.png)
+![Admin Panel](screenshots/Screenshot 2025-09-29 082224.png)
+![Admin Panel](screenshots/Screenshot 2025-09-29 082247.png)
+![Admin Panel](screenshots/Screenshot 2025-09-29 082310.png)
+![Admin Panel](screenshots/Screenshot 2025-09-29 082355.png)
+
+### Login & Registration
+
+![Login & Registration](screenshots/Screenshot 2025-09-29 082422.png)
+
+### Account
+
+![Account](screenshots/Screenshot 2025-09-29 082452.png)
+
+### Ticket Validation
+
+![Ticket Validation](screenshots/Screenshot 2025-09-29 082530.png)
