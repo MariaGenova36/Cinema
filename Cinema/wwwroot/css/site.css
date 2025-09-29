@@ -196,3 +196,28 @@ button.accept-policy {
     color: inherit !important; 
     box-shadow: none !important; 
 }
+
+
+
+#backToTopBtn {
+    display: none; /* скрит по начало */
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 99;
+    font-size: 20px;
+    border: none;
+    outline: none;
+    background-color: #d4af37; /* златисто */
+    color: white;
+    cursor: pointer;
+    padding: 14px 16px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    transition: all 0.3s ease;
+}
+
+    #backToTopBtn:hover {
+        background-color: #b8902f; /* по-тъмно златисто */
+        transform: translateY(-3px);
+    }
