@@ -72,27 +72,25 @@ Its goal is to demonstrate building a complete MVC web application with database
 ![Privacy Page](screenshots/Screenshot_2025-09-29_081922.png)
 
 ### About Us Page
-![About Us Page](screenshots/Screenshot_2025-09-29_081946.png)
-![About Us Page](screenshots/Screenshot_2025-09-29_081959.png)
-![About Us Page](screenshots/Screenshot_2025-09-29_082015.png)
+![About Us Page 1](screenshots/Screenshot_2025-09-29_081946.png)
+![About Us Page 2](screenshots/Screenshot_2025-09-29_081959.png)
+![About Us Page 3](screenshots/Screenshot_2025-09-29_082015.png)
 
 ### Movies Page
 ![Movies Page](screenshots/Screenshot_2025-09-29_082041.png)
 
 ### Projections Page
-![Projections Page](screenshots/Screenshot_2025-09-29_082058.png)
-
-### Projections Page
-![Projections Page](screenshots/Screenshot_2025-09-29_082122.png)
+![Projections Page 1](screenshots/Screenshot_2025-09-29_082058.png)
+![Projections Page 2](screenshots/Screenshot_2025-09-29_082122.png)
 
 ### Admin Panel
 
-![Admin Panel](screenshots/Screenshot_2025-09-29_082146.png)
-![Admin Panel](screenshots/Screenshot_2025-09-29_082212.png)
-![Admin Panel](screenshots/Screenshot_2025-09-29_082224.png)
-![Admin Panel](screenshots/Screenshot_2025-09-29_082247.png)
-![Admin Panel](screenshots/Screenshot_2025-09-29_082310.png)
-![Admin Panel](screenshots/Screenshot_2025-09-29_082355.png)
+![Admin Panel 1](screenshots/Screenshot_2025-09-29_082146.png)
+![Admin Panel 2](screenshots/Screenshot_2025-09-29_082212.png)
+![Admin Panel 3](screenshots/Screenshot_2025-09-29_082224.png)
+![Admin Panel 4](screenshots/Screenshot_2025-09-29_082247.png)
+![Admin Panel 5](screenshots/Screenshot_2025-09-29_082310.png)
+![Admin Panel 6](screenshots/Screenshot_2025-09-29_082355.png)
 
 ### Login & Registration
 
