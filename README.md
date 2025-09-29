@@ -29,13 +29,11 @@ Its goal is to demonstrate building a complete MVC web application with database
 
 4. Database setup
 
-5. Update the connection string in Web.config if needed:
+5. Update the connection string in appsettings.json if needed:
 
-<connectionStrings>
-  <add name="DefaultConnection" 
-       connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=CinemaDB;Integrated Security=True" 
-       providerName="System.Data.SqlClient" />
-</connectionStrings>
+ "ConnectionStrings": {
+   "DefaultConnection": "Server=(localdb)\\MSSQLLocalDB;Database=CinemaDb;Trusted_Connection=True;MultipleActiveResultSets=true"
+ }
     
 6. Run the migrations:
 
