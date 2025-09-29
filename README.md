@@ -39,8 +39,8 @@ Its goal is to demonstrate building a complete MVC web application with database
     
 6. Run the migrations:
 
-Update-Database
-Run the project
+- Update-Database
+- Run the project
 
 ## Features
 1. User registration and login
@@ -66,42 +66,42 @@ Run the project
 ## Screenshots
 
 ### Home Page
-![Home Page](screenshots/Screenshot 2025-09-29 081834.png)
+![Home Page](screenshots/Screenshot_2025-09-29_081834.png)
 
 ### Privacy Page
-![Privacy Page](screenshots/Screenshot 2025-09-29 081922.png)
+![Privacy Page](screenshots/Screenshot_2025-09-29_081922.png)
 
 ### About Us Page
-![About Us Page](screenshots/Screenshot 2025-09-29 081946.png)
-![About Us Page](screenshots/Screenshot 2025-09-29 081959.png)
-![About Us Page](screenshots/Screenshot 2025-09-29 082015.png)
+![About Us Page](screenshots/Screenshot_2025-09-29_081946.png)
+![About Us Page](screenshots/Screenshot_2025-09-29_081959.png)
+![About Us Page](screenshots/Screenshot_2025-09-29_082015.png)
 
 ### Movies Page
-![Movies Page](screenshots/Screenshot 2025-09-29 082041.png)
+![Movies Page](screenshots/Screenshot_2025-09-29_082041.png)
 
 ### Projections Page
-![Projections Page](screenshots/Screenshot 2025-09-29 082058.png)
+![Projections Page](screenshots/Screenshot_2025-09-29_082058.png)
 
 ### Projections Page
-![Projections Page](screenshots/Screenshot 2025-09-29 082122.png)
+![Projections Page](screenshots/Screenshot_2025-09-29_082122.png)
 
 ### Admin Panel
 
-![Admin Panel](screenshots/Screenshot 2025-09-29 082146.png)
-![Admin Panel](screenshots/Screenshot 2025-09-29 082212.png)
-![Admin Panel](screenshots/Screenshot 2025-09-29 082224.png)
-![Admin Panel](screenshots/Screenshot 2025-09-29 082247.png)
-![Admin Panel](screenshots/Screenshot 2025-09-29 082310.png)
-![Admin Panel](screenshots/Screenshot 2025-09-29 082355.png)
+![Admin Panel](screenshots/Screenshot_2025-09-29_082146.png)
+![Admin Panel](screenshots/Screenshot_2025-09-29_082212.png)
+![Admin Panel](screenshots/Screenshot_2025-09-29_082224.png)
+![Admin Panel](screenshots/Screenshot_2025-09-29_082247.png)
+![Admin Panel](screenshots/Screenshot_2025-09-29_082310.png)
+![Admin Panel](screenshots/Screenshot_2025-09-29_082355.png)
 
 ### Login & Registration
 
-![Login & Registration](screenshots/Screenshot 2025-09-29 082422.png)
+![Login & Registration](screenshots/Screenshot_2025-09-29_082422.png)
 
 ### Account
 
-![Account](screenshots/Screenshot 2025-09-29 082452.png)
+![Account](screenshots/Screenshot_2025-09-29_082452.png)
 
 ### Ticket Validation
 
-![Ticket Validation](screenshots/Screenshot 2025-09-29 082530.png)
+![Ticket Validation](screenshots/Screenshot_2025-09-29_082530.png)
