@@ -66,40 +66,40 @@ Its goal is to demonstrate building a complete MVC web application with database
 ## Screenshots
 
 ### Home Page
-![Home Page](screenshots/Screenshot_2025-09-29_081834.png)
+![Home Page](/Cinema/screenshots/Screenshot_2025-09-29_081834.png)
 
 ### Privacy Page
-![Privacy Page](screenshots/Screenshot_2025-09-29_081922.png)
+![Privacy Page](/Cinema/screenshots/Screenshot_2025-09-29_081922.png)
 
 ### About Us Page
-![About Us Page 1](screenshots/Screenshot_2025-09-29_081946.png)
-![About Us Page 2](screenshots/Screenshot_2025-09-29_081959.png)
-![About Us Page 3](screenshots/Screenshot_2025-09-29_082015.png)
+![About Us Page 1](/Cinema/screenshots/Screenshot_2025-09-29_081946.png)
+![About Us Page 2](/Cinema/screenshots/Screenshot_2025-09-29_081959.png)
+![About Us Page 3](/Cinema/screenshots/Screenshot_2025-09-29_082015.png)
 
 ### Movies Page
-![Movies Page](screenshots/Screenshot_2025-09-29_082041.png)
+![Movies Page](/Cinema/screenshots/Screenshot_2025-09-29_082041.png)
 
 ### Projections Page
-![Projections Page 1](screenshots/Screenshot_2025-09-29_082058.png)
-![Projections Page 2](screenshots/Screenshot_2025-09-29_082122.png)
+![Projections Page 1](/Cinema/screenshots/Screenshot_2025-09-29_082058.png)
+![Projections Page 2](/Cinema/screenshots/Screenshot_2025-09-29_082122.png)
 
 ### Admin Panel
 
-![Admin Panel 1](screenshots/Screenshot_2025-09-29_082146.png)
-![Admin Panel 2](screenshots/Screenshot_2025-09-29_082212.png)
-![Admin Panel 3](screenshots/Screenshot_2025-09-29_082224.png)
-![Admin Panel 4](screenshots/Screenshot_2025-09-29_082247.png)
-![Admin Panel 5](screenshots/Screenshot_2025-09-29_082310.png)
-![Admin Panel 6](screenshots/Screenshot_2025-09-29_082355.png)
+![Admin Panel 1](/Cinema/screenshots/Screenshot_2025-09-29_082146.png)
+![Admin Panel 2](/Cinema/screenshots/Screenshot_2025-09-29_082212.png)
+![Admin Panel 3](/Cinema/screenshots/Screenshot_2025-09-29_082224.png)
+![Admin Panel 4](/Cinema/screenshots/Screenshot_2025-09-29_082247.png)
+![Admin Panel 5](/Cinema/screenshots/Screenshot_2025-09-29_082310.png)
+![Admin Panel 6](/Cinema/screenshots/Screenshot_2025-09-29_082355.png)
 
 ### Login & Registration
 
-![Login & Registration](screenshots/Screenshot_2025-09-29_082422.png)
+![Login & Registration](/Cinema/screenshots/Screenshot_2025-09-29_082422.png)
 
 ### Account
 
-![Account](screenshots/Screenshot_2025-09-29_082452.png)
+![Account](/Cinema/screenshots/Screenshot_2025-09-29_082452.png)
 
 ### Ticket Validation
 
-![Ticket Validation](screenshots/Screenshot_2025-09-29_082530.png)
+![Ticket Validation](/Cinema/screenshots/Screenshot_2025-09-29_082530.png)
