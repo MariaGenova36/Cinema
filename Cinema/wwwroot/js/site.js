@@ -58,21 +58,24 @@
     }
 
     updatePrice();
-});
 
-//Button back to top
+    //Button back to top
 
+    const backToTopBtn = document.getElementById("backToTopBtn");
 
-window.onscroll = function () {
-    const btn = document.getElementById("backToTopBtn");
-    if (!btn) return;
-    if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-        btn.style.display = "block";
-    } else {
-        btn.style.display = "none";
+    if (backToTopBtn) {
+        // показва/скрива бутона
+        window.addEventListener("scroll", () => {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                backToTopBtn.style.display = "block";
+            } else {
+                backToTopBtn.style.display = "none";
+            }
+        });
+
+        // плавно скролиране нагоре
+        backToTopBtn.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
     }
-};
-
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+});
